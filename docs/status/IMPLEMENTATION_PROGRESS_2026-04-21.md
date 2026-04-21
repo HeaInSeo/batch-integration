@@ -75,6 +75,19 @@
 - summary 출력 경로 고정
 - churn / fallback / retention 회귀 지표 강화
 
+## 3.5. VM Lab Bootstrap
+
+현재 반영된 최소 자산:
+- `deploy/vm-lab/` kustomize 초안 추가
+- namespace `batch-int-dev`
+- `artifact-handoff` Deployment/Service 초안
+- `jumi` ServiceAccount/Role/RoleBinding/Deployment/Service 초안
+- `lab-master-0` 기준 적용 README 추가
+
+현재 의미:
+- `100.123.80.48`의 `lab-master-0` 3노드 클러스터에 올릴 최소 자산이 생겼다.
+- 아직 `dev-space`는 없지만, 이미지가 준비되면 VM 검증 경로로 전환할 수 있다.
+
 ## 4. 스프린트 해석
 
 원본 설계 문서 기준으로 보면:

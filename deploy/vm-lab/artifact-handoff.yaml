@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifact-handoff
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifact-handoff
+  template:
+    metadata:
+      labels:
+        app: artifact-handoff
+    spec:
+      containers:
+        - name: artifact-handoff
+          image: ghcr.io/heainseo/artifact-handoff:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: AH_ADDR
+              value: ":8080"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifact-handoff
+spec:
+  selector:
+    app: artifact-handoff
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
