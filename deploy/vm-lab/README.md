@@ -85,6 +85,17 @@ sudo /usr/bin/snap run multipass exec lab-master-0 -- bash -lc '
 '
 ```
 
+적용 스크립트 기준 예시:
+
+```bash
+cd /opt/go/src/github.com/HeaInSeo/batch-integration
+export KUBECONFIG=/etc/kubernetes/admin.conf
+REGISTRY_HOST=harbor.10.113.24.96.nip.io \
+REGISTRY_PROJECT=batch-int \
+IMAGE_TAG=dev \
+./scripts/apply-vm-lab-manifests.sh
+```
+
 이미지 push 예시:
 
 ```bash
@@ -93,6 +104,17 @@ podman build -f /opt/go/src/github.com/HeaInSeo/artifact-handoff/Containerfile -
 podman build -f /opt/go/src/github.com/HeaInSeo/JUMI/Containerfile -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github.com/HeaInSeo/JUMI
 podman push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
 podman push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
+```
+
+빌드 스크립트 기준 예시:
+
+```bash
+cd /opt/go/src/github.com/HeaInSeo/batch-integration
+REGISTRY_HOST=harbor.10.113.24.96.nip.io \
+REGISTRY_PROJECT=batch-int \
+IMAGE_TAG=dev \
+OCI_TOOL=podman \
+./scripts/build-vm-lab-images.sh
 ```
 
 Docker 기준 예시:
@@ -138,7 +160,7 @@ kubectl -n batch-int-dev port-forward deploy/jumi 18081:8080 19090:9090
 ## 아직 남은 것
 
 - 기존 Harbor project/권한 정책 확인
-- 실제 이미지 빌드/푸시 경로
+- 실제 이미지 빌드/푸시 실행
 - JUMI API submit fixture
 - kube-slint 수집/summary 경로
 - `dev-space` 또는 대체 동기화 워크플로우
