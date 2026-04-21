@@ -10,15 +10,20 @@
 
 ## 현재 타깃
 
-- 검증 타깃 VM: `multipass-k8s-vm`
-- 확인된 접근 IP: `100.123.80.48`
+- 관리 호스트: `100.123.80.48`
+- 호스트 내 multipass 관리 영역: `multipass-k8s-lab`
+- 실제 검증 타깃: `multipass-k8s-lab` 내부에 새로 잡아야 하는 Kubernetes 검증 VM
 - 현재 확인 상태:
-  - `22/tcp` 접속 가능
+  - `100.123.80.48:22` 접속 가능
   - 로컬 `multipass list`에는 직접 노출되지 않음
+  - 따라서 로컬 호스트의 multipass가 아니라 원격 호스트의 multipass 관리 영역을 확인해야 함
+  - `dev-space`는 아직 존재하지 않는 것으로 전제함
 
 해석:
-- 이 VM은 현재 로컬 multipass 관리 명령으로 직접 다루기보다,
-  원격 접근 가능한 별도 검증 타깃으로 취급하는 편이 안전하다.
+- `100.123.80.48` 자체를 곧바로 검증 VM으로 취급하면 안 된다.
+- 먼저 `100.123.80.48`에 접속한 뒤, 그 안의 `multipass-k8s-lab`이 관리하는 VM 목록과
+  실제 Kubernetes 타깃을 확인해야 한다.
+- `dev-space`는 후속 구축 항목이다.
 
 ## 언제 이 경로로 넘길지
 
@@ -39,15 +44,28 @@
 `AH + JUMI + kube-slint`의 최소 cross-repo seam이 한 번 더 올라온 뒤
 VM 검증으로 넘기는 것이 맞다.
 
+그 시점에 필요한 첫 확인 항목:
+- `100.123.80.48`에서 `multipass list`
+- 대상 VM 이름 확인
+- kubeconfig 위치 확인
+- 현재 Kubernetes 경로 확인
+
+그 다음 구축 항목:
+- dev-space 설치 또는 대체 워크플로우 선택
+- 소스 동기화/배포 경로 고정
+- JUMI/AH/kube-slint 검증 fixture 실행 경로 고정
+
 ## 사용자가 VM에서 확인할 항목
 
 1. JUMI run 성공/실패가 의도대로 보이는지
 2. AH artifact register / resolve 호출이 최소 경로에서 보이는지
-3. kube-slint summary가 fallback, retention, churn 계열 변화를 잡는지
-4. 기능 추가 전후로 같은 fixture를 넣었을 때 회귀가 없는지
+3. JUMI resolve/materialization 메트릭이 기대대로 증가하는지
+4. kube-slint summary가 fallback, retention, churn 계열 변화를 잡는지
+5. 기능 추가 전후로 같은 fixture를 넣었을 때 회귀가 없는지
 
 ## 현재 원칙
 
 - 빠른 개발 루프를 VM 검증으로 대체하지 않는다.
 - VM 검증은 milestone 또는 기능 묶음 단위에서 수행한다.
+- `100.123.80.48`은 즉시 검증 환경이 아니라 구축 대상 환경이다.
 - 사용자가 직접 확인 가능한 단계가 되면, 접속 경로와 확인 명령을 별도 정리해 제공한다.
