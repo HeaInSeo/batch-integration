@@ -32,5 +32,19 @@
 운영 원칙:
 - `kube-slint`는 후행 검증 도구가 아니라 초기 병행 개발 축으로 취급한다.
 - 단, 초기에는 `개발 동반용 최소 guardrail` 범위로 제한한다.
-- `kind + ko + tilt` 경로에서 JUMI/AH 변경을 바로 관찰할 수 있어야 한다.
-- `multipass/dev-space`는 첫 통합 이후 고도화 단계에서 확장한다.
+- host 환경 이슈는 주 개발 스프린트와 분리한다.
+- `vm + dev-space`는 즉시 대체 운영 경로가 아니라 별도 구축 스프린트로 취급한다.
+
+현재 스프린트 우선순위:
+- 주 개발 트랙:
+  - `artifact-handoff`, `JUMI`, `kube-slint` 구현 지속
+- 환경 구축 트랙:
+  - `vm + dev-space` 최소 구축
+- 현실 검증 트랙:
+  - VM 경로 구축 완료 후 milestone 단위로 편입
+
+주요 참고 문서:
+- 스프린트 전략:
+  [`docs/master-plan/SPRINT_STRATEGY_v1.0.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/master-plan/SPRINT_STRATEGY_v1.0.md:1)
+- 검증 전략:
+  [`docs/master-plan/VALIDATION_STRATEGY.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/master-plan/VALIDATION_STRATEGY.md:1)

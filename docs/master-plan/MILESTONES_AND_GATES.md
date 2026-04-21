@@ -28,7 +28,7 @@
 
 완료 기준:
 - `kube-slint`가 JUMI/AH 핵심 metrics family를 읽을 준비가 됨
-- `kind + ko + tilt` 기준 최소 수집 경로가 문서화됨
+- cluster 비의존 최소 수집 경로가 문서화됨
 - 최소 derived indicator 후보가 정리됨
 - save/commit 시점에 돌릴 최소 summary 출력 경로가 존재함
 
@@ -41,7 +41,17 @@
 - AH가 응답한 contract로 JUMI happy path 실행
 - 최소 e2e 시나리오 1개 존재
 - kube-slint가 JUMI/AH 최소 summary 생성
-- kind 환경에서 churn/regression 확인 경로가 실제로 동작
+- cluster 환경 의존도가 낮은 integration check 경로가 실제로 동작
+
+## M3.5. VM + dev-space 최소 구축
+
+목표일: `2026-05-23`
+
+완료 기준:
+- `multipass` VM 내부에서 개발용 Kubernetes 경로 1개가 선택됨
+- JUMI/AH/kube-slint 배포 가능한 기본 경로가 존재함
+- 메트릭 확인 가능
+- kube-slint 1회 실행 가능
 
 ## M4. 베타 기반
 
@@ -53,6 +63,7 @@
 - derived indicator 최소판 존재
 - multi-component summary 초안 존재
 - JUMI/AH 기능 PR과 kube-slint summary 변화가 같이 검증됨
+- `vm + dev-space`가 milestone 검증 경로로 편입됨
 
 ## M5. 운영성 강화
 
