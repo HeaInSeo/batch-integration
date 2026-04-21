@@ -37,6 +37,11 @@ openat2 ... /cpu.weight: no such file or directory
     - `cpuset io memory pids`
 - 즉, `cpu` 컨트롤러가 실제 위임 목록에서 빠져 있음
 - root `cgroup.controllers`에는 `cpu`가 존재하지만, root `subtree_control`에는 반영되지 않음
+- host kernel config:
+  - `/lib/modules/$(uname -r)/config` -> `CONFIG_RT_GROUP_SCHED=y`
+- local systemd documentation:
+  - `/usr/share/doc/systemd/README`
+  - cgroup v2/systemd 사용 시 `CONFIG_RT_GROUP_SCHED=n` 권장 문구 확인
 - `echo +cpu > /sys/fs/cgroup/cgroup.subtree_control` 시도 결과:
   - `write error: Invalid argument`
 - `echo +cpu > /sys/fs/cgroup/user.slice/cgroup.subtree_control` 시도 결과:
@@ -55,6 +60,9 @@ openat2 ... /cpu.weight: no such file or directory
    불완전하게 끝나는 것으로 보임
 4. 특히 root `subtree_control`에서 `cpu` enable이 `EINVAL`로 실패하므로,
    현재 문제는 단순 user slice 설정 누락보다 더 상위의 host cgroup 제약일 가능성이 큼
+5. 현재 가장 유력한 root cause는 Rocky 8.10 / 4.18 기반 호스트 커널이
+   `CONFIG_RT_GROUP_SCHED=y`로 빌드되어 있어 `cpu` controller delegation 경로가
+   깨지는 점이다
 
 ## Failed Workarounds
 
@@ -86,6 +94,29 @@ write /sys/fs/cgroup/cgroup.subtree_control: invalid argument
 - `systemd` manager만의 문제가 아니라
   이 호스트의 root cgroup CPU delegation 자체가 현재 막혀 있는 것으로 봐야 한다
 
+### 3. Host Kernel Constraint (`CONFIG_RT_GROUP_SCHED=y`)
+
+로컬에서 직접 확인한 사실:
+
+```text
+/lib/modules/$(uname -r)/config
+CONFIG_RT_GROUP_SCHED=y
+```
+
+그리고 systemd 배포 문서에는 다음 권고가 있다.
+
+- Real-Time group scheduling은 systemd 사용 시 끄는 편이 좋음
+- 권장값: `CONFIG_RT_GROUP_SCHED=n`
+
+현재 환경은 정확히 그 반대 설정이며, 실제 증상도 다음과 같이 맞아떨어진다.
+
+- root `cgroup.controllers`에는 `cpu` 존재
+- 하지만 root `cgroup.subtree_control`에 `+cpu` 적용 시 `EINVAL`
+- user slice 방향으로 `cpu`를 내려보낼 수 없음
+- kind node 내부 kubelet은 `cpu.weight` 경로를 만들지 못함
+
+즉, 현재 장애는 단순 스크립트 문제보다 host kernel/cgroup 정책 제약일 가능성이 매우 높다.
+
 ## Difference From Previous RPM Incident
 
 이 이슈는 앞선 `rpm` DB incident와 별개다.
@@ -104,13 +135,13 @@ write /sys/fs/cgroup/cgroup.subtree_control: invalid argument
 다음 순서로 계속 진행한다.
 
 1. host 최상위 및 `user.slice` 계층에서 `cpu` controller availability 확인
-2. root `subtree_control`에서 `+cpu`가 왜 `EINVAL`인지 kernel/systemd 메시지 확인
-3. host-level 해결책 검토:
-   - kernel/systemd/runtime 정책 확인
-   - 다른 container runtime 경로 검토
-4. 해결 후 `batch-int-dev` kind cluster 재생성
-5. kubeconfig 반영 확인
-6. `tilt up --host 0.0.0.0 --port 10350` 진입
+2. host-level 해결책 검토:
+   - `CONFIG_RT_GROUP_SCHED=n` 커널/호스트 사용
+   - Docker 기반 host 또는 다른 dev machine 사용
+   - rootful podman 외 다른 런타임 경로 검토
+3. 해결 환경에서 `batch-int-dev` kind cluster 재생성
+4. kubeconfig 반영 확인
+5. `tilt up --host 0.0.0.0 --port 10350` 진입
 
 ## Related Docs
 

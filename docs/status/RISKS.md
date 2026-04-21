@@ -39,5 +39,6 @@
 - `sudo podman info --format json` 정상 여부와 별개로 kubelet bootstrap 로그 확인
 - `batch-int-dev-control-plane` 내부 `journalctl -u kubelet`에서 `cpu.weight` 오류 점검
 - host의 `user.slice` / `user-<uid>.slice` `cgroup.subtree_control`에서 `cpu` 위임 여부 확인
+- host kernel의 `CONFIG_RT_GROUP_SCHED` 값 확인
 - 진행 중 incident 기록:
   [`KIND_CGROUP_CPU_DELEGATION_2026-04-21.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/status/KIND_CGROUP_CPU_DELEGATION_2026-04-21.md:1)
