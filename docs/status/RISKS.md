@@ -32,3 +32,12 @@
 - Berkeley DB 기반 `/var/lib/rpm/__db.*` stale 이슈는 백업 후 제거 절차로 복구
 - 상세 복구 기록:
   [`KIND_PODMAN_RPM_RECOVERY_2026-04-21.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/status/KIND_PODMAN_RPM_RECOVERY_2026-04-21.md:1)
+
+## R6. Host cgroup delegation에서 `cpu` 누락으로 kind bootstrap 실패
+
+완화:
+- `sudo podman info --format json` 정상 여부와 별개로 kubelet bootstrap 로그 확인
+- `batch-int-dev-control-plane` 내부 `journalctl -u kubelet`에서 `cpu.weight` 오류 점검
+- host의 `user.slice` / `user-<uid>.slice` `cgroup.subtree_control`에서 `cpu` 위임 여부 확인
+- 진행 중 incident 기록:
+  [`KIND_CGROUP_CPU_DELEGATION_2026-04-21.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/status/KIND_CGROUP_CPU_DELEGATION_2026-04-21.md:1)

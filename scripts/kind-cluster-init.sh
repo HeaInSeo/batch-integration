@@ -58,7 +58,10 @@ else
 fi
 
 echo "Exporting kubeconfig to /tmp/kind-${CLUSTER_NAME}.yaml..."
-sudo env KUBECONFIG=/root/.kube/config \
+sudo env \
+  KIND_EXPERIMENTAL_PROVIDER=podman \
+  DOCKER_HOST=unix:///run/podman/podman.sock \
+  KUBECONFIG=/root/.kube/config \
   "${KIND_BIN}" export kubeconfig \
   --name "${CLUSTER_NAME}" \
   --kubeconfig "/tmp/kind-${CLUSTER_NAME}.yaml"
