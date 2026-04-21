@@ -56,6 +56,36 @@ openat2 ... /cpu.weight: no such file or directory
 4. 특히 root `subtree_control`에서 `cpu` enable이 `EINVAL`로 실패하므로,
    현재 문제는 단순 user slice 설정 누락보다 더 상위의 host cgroup 제약일 가능성이 큼
 
+## Failed Workarounds
+
+다음 우회도 시도했지만 해결되지 않았다.
+
+### 1. Rootful Podman `cgroup_manager=systemd`
+
+- 결과:
+  - kind node container는 기동
+  - kubelet static pod sandbox 생성 실패
+  - `cpu.weight` path missing 지속
+
+### 2. Rootful Podman `cgroup_manager=cgroupfs`
+
+- 임시 설정 파일:
+  - `scripts/podman-cgroupfs.containers.conf`
+- 확인 결과:
+  - `podman info`에서 `cgroupManager: cgroupfs` 반영 확인
+- 하지만 실제 bootstrap 로그:
+
+```text
+WARN Failed to add conmon to cgroupfs sandbox cgroup:
+write /sys/fs/cgroup/cgroup.subtree_control: invalid argument
+```
+
+- 그리고 kubelet 쪽 `cpu.weight` 관련 실패도 계속 발생
+
+결론:
+- `systemd` manager만의 문제가 아니라
+  이 호스트의 root cgroup CPU delegation 자체가 현재 막혀 있는 것으로 봐야 한다
+
 ## Difference From Previous RPM Incident
 
 이 이슈는 앞선 `rpm` DB incident와 별개다.
@@ -75,9 +105,12 @@ openat2 ... /cpu.weight: no such file or directory
 
 1. host 최상위 및 `user.slice` 계층에서 `cpu` controller availability 확인
 2. root `subtree_control`에서 `+cpu`가 왜 `EINVAL`인지 kernel/systemd 메시지 확인
-3. `batch-int-dev` kind cluster 재생성
-4. kubeconfig 반영 확인
-5. `tilt up --host 0.0.0.0 --port 10350` 진입
+3. host-level 해결책 검토:
+   - kernel/systemd/runtime 정책 확인
+   - 다른 container runtime 경로 검토
+4. 해결 후 `batch-int-dev` kind cluster 재생성
+5. kubeconfig 반영 확인
+6. `tilt up --host 0.0.0.0 --port 10350` 진입
 
 ## Related Docs
 

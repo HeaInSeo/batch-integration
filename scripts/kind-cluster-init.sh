@@ -20,6 +20,7 @@ WORKSPACE_ROOT="$(cd "${HUB_ROOT}/.." && pwd)"
 
 CLUSTER_NAME="${CLUSTER_NAME:-batch-int-dev}"
 KUBECONFIG_PATH="${HOME}/.kube/config"
+CONTAINERS_CONF_PATH="${CONTAINERS_CONF_PATH:-}"
 
 find_kind_bin() {
   if [[ -x "${WORKSPACE_ROOT}/hello-operator/bin/kind" ]]; then
@@ -45,22 +46,28 @@ fi
 
 echo "Using kind binary: ${KIND_BIN}"
 echo "Checking for existing cluster..."
-if sudo env KIND_EXPERIMENTAL_PROVIDER=podman DOCKER_HOST=unix:///run/podman/podman.sock \
+SUDO_KIND_ENV=(
+  KIND_EXPERIMENTAL_PROVIDER=podman
+  DOCKER_HOST=unix:///run/podman/podman.sock
+)
+
+if [[ -n "${CONTAINERS_CONF_PATH}" ]]; then
+  echo "Using containers.conf override: ${CONTAINERS_CONF_PATH}"
+  SUDO_KIND_ENV+=(CONTAINERS_CONF="${CONTAINERS_CONF_PATH}")
+fi
+
+if sudo env "${SUDO_KIND_ENV[@]}" \
     "${KIND_BIN}" get clusters 2>/dev/null | grep -q "^${CLUSTER_NAME}$"; then
   echo "Cluster '${CLUSTER_NAME}' already exists. Skipping creation."
 else
   echo "Creating kind cluster '${CLUSTER_NAME}' via rootful podman..."
-  sudo env \
-    KIND_EXPERIMENTAL_PROVIDER=podman \
-    DOCKER_HOST=unix:///run/podman/podman.sock \
+  sudo env "${SUDO_KIND_ENV[@]}" \
     "${KIND_BIN}" create cluster --name "${CLUSTER_NAME}"
   echo "Cluster created."
 fi
 
 echo "Exporting kubeconfig to /tmp/kind-${CLUSTER_NAME}.yaml..."
-sudo env \
-  KIND_EXPERIMENTAL_PROVIDER=podman \
-  DOCKER_HOST=unix:///run/podman/podman.sock \
+sudo env "${SUDO_KIND_ENV[@]}" \
   KUBECONFIG=/root/.kube/config \
   "${KIND_BIN}" export kubeconfig \
   --name "${CLUSTER_NAME}" \
