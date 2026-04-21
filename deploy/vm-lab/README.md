@@ -32,12 +32,34 @@
 
 ## 필요한 이미지
 
-아래 이미지는 아직 placeholder다.
+현재 Harbor endpoint:
 
-- `ghcr.io/heainseo/artifact-handoff:dev`
-- `ghcr.io/heainseo/jumi:dev`
+- `http://harbor.10.113.24.96.nip.io`
 
-실제 배포 전에는 이 태그를 실제 빌드/푸시 결과로 치환해야 한다.
+현재 클러스터에서 확인한 기존 사용 예:
+
+- `harbor.10.113.24.96.nip.io/nodeforge/controlplane:latest`
+
+즉 현재 관행은 대략 아래 형태다.
+
+- `<harbor-host>/<project>/<component>:<tag>`
+
+임시 예시 project:
+
+- `batch-int`
+
+권장 이미지:
+
+- `harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev`
+- `harbor.10.113.24.96.nip.io/batch-int/jumi:dev`
+
+실제 배포 전 체크:
+
+- 기존 Harbor 운영 규칙 확인
+  - 기존 project를 재사용할지
+  - `batch-int` 같은 신규 project를 만들지
+- push 계정/robot 계정 또는 사용자 계정 확보
+- 노드가 해당 Harbor endpoint를 pull 가능한지 확인
 
 ## 적용 순서
 
@@ -52,6 +74,16 @@ sudo /usr/bin/snap run multipass exec lab-master-0 -- bash -lc '
   export KUBECONFIG=/etc/kubernetes/admin.conf
   kubectl apply -k /path/to/batch-integration/deploy/vm-lab
 '
+```
+
+이미지 push 예시:
+
+```bash
+podman login harbor.10.113.24.96.nip.io
+podman build -t harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev /opt/go/src/github.com/HeaInSeo/artifact-handoff
+podman build -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github.com/HeaInSeo/JUMI
+podman push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
+podman push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
 ```
 
 ## 1차 확인 항목
@@ -73,6 +105,7 @@ kubectl -n batch-int-dev port-forward deploy/jumi 18081:8080 19090:9090
 
 ## 아직 남은 것
 
+- 기존 Harbor project/권한 정책 확인
 - 실제 이미지 빌드/푸시 경로
 - JUMI API submit fixture
 - kube-slint 수집/summary 경로
