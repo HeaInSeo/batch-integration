@@ -11,6 +11,7 @@
 - 각 저장소 내부 설계의 canonical 문서는 각 저장소에 유지한다.
 - 이 디렉토리는 cross-repo 일정, 계약, 운영 규칙만 다룬다.
 - 원본 계획 문서는 `plans/original/`에 보존하고, 수정안은 `plans/revised/`에 둔다.
+- `AH`, `JUMI`, `kube-slint` 원본 설계 문서의 상위 일정은 가장 중요한 기준으로 유지한다.
 
 구성:
 - `plans/original/`: 2026-04-21 기준 원본 계획 문서 보관본
