@@ -89,8 +89,8 @@ sudo /usr/bin/snap run multipass exec lab-master-0 -- bash -lc '
 
 ```bash
 podman login harbor.10.113.24.96.nip.io
-podman build -t harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev /opt/go/src/github.com/HeaInSeo/artifact-handoff
-podman build -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github.com/HeaInSeo/JUMI
+podman build -f /opt/go/src/github.com/HeaInSeo/artifact-handoff/Containerfile -t harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev /opt/go/src/github.com/HeaInSeo/artifact-handoff
+podman build -f /opt/go/src/github.com/HeaInSeo/JUMI/Containerfile -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github.com/HeaInSeo/JUMI
 podman push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
 podman push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
 ```
