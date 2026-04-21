@@ -25,6 +25,18 @@
   실제 Kubernetes 타깃을 확인해야 한다.
 - `dev-space`는 후속 구축 항목이다.
 
+현재 확인된 실제 VM:
+- `lab-master-0`
+- `lab-worker-0`
+- `lab-worker-1`
+
+현재 확인된 Kubernetes 상태:
+- 3노드 모두 `Ready`
+- control-plane: `lab-master-0`
+- `lab-master-0` 내부 `kubectl` 정상 동작
+- kubeconfig: `/etc/kubernetes/admin.conf`
+- `dev-space`는 아직 설치/구축되지 않음
+
 ## 언제 이 경로로 넘길지
 
 아래 조건이 맞으면 `vm + dev-space` 검증을 시작한다.
@@ -68,4 +80,5 @@ VM 검증으로 넘기는 것이 맞다.
 - 빠른 개발 루프를 VM 검증으로 대체하지 않는다.
 - VM 검증은 milestone 또는 기능 묶음 단위에서 수행한다.
 - `100.123.80.48`은 즉시 검증 환경이 아니라 구축 대상 환경이다.
+- 현재는 `multipass` user CLI가 불안정하므로, 복구 전까지는 root 기준 표준 CLI 경로로 상태를 확인한다.
 - 사용자가 직접 확인 가능한 단계가 되면, 접속 경로와 확인 명령을 별도 정리해 제공한다.

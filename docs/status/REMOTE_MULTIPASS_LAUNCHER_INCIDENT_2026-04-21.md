@@ -63,20 +63,26 @@ exec /usr/bin/snap run multipass "$@"
 
 ## 현재 영향
 
-- `100.123.80.48`에서 k8s 검증 VM 목록 확인 불가
-- kubeconfig 위치 확인 불가
-- dev-space 신규 구축 착수 불가
-- 현실 검증 트랙은 아직 `환경 복구 단계`
+- user 기준 `multipass` CLI는 여전히 불안정
+- 그러나 root 기준 표준 CLI 경로로는 상태 확인이 가능해졌다
+- 확인된 VM:
+  - `lab-master-0`
+  - `lab-worker-0`
+  - `lab-worker-1`
+- `lab-master-0` 내부 k8s 3노드 클러스터 `Ready` 확인
+- kubeconfig 위치 확인:
+  - `/etc/kubernetes/admin.conf`
+- `dev-space` 신규 구축은 아직 시작 전
 
 ## 권장 복구 방향
 
 우선순위는 아래 순서가 맞다.
 
-1. `/usr/local/bin/multipass` 래퍼 우회 또는 수정
-2. 실제 multipass binary/snap 경로 확인
-3. `multipass list`가 정상 동작하는지 확인
-4. 그 다음에만 `multipass-k8s-lab` 내부 VM과 k8s 경로 점검
-5. 이후 dev-space 설치 또는 대체 워크플로우 선정
+1. `/usr/local/bin/multipass` 래퍼 의존 제거
+2. root/user 모두에서 표준 CLI 안정화
+3. `multipass list`가 세션 간 일관되게 동작하는지 확인
+4. 이후 `multipass-k8s-lab` 내부 VM과 k8s 경로를 지속적으로 사용
+5. 그 다음 dev-space 설치 또는 대체 워크플로우 선정
 
 ## 스프린트 해석
 
