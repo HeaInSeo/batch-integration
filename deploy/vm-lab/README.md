@@ -48,10 +48,18 @@
 
 - `batch-int`
 
-권장 이미지:
+기본 예시 이미지:
 
 - `harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev`
 - `harbor.10.113.24.96.nip.io/batch-int/jumi:dev`
+
+중요:
+
+- Harbor endpoint, project, tag는 개발 중이라 추후 변경될 수 있다.
+- 따라서 매니페스트 본문에는 고정 주소를 직접 박지 않고,
+  `kustomization.yaml`의 `images:` override를 통해 바꾸도록 구성했다.
+- 즉, 향후 Harbor 주소가 바뀌거나 GHCR 등 다른 registry로 전환돼도
+  `deploy/vm-lab/kustomization.yaml`만 바꾸면 된다.
 
 실제 배포 전 체크:
 
@@ -60,6 +68,7 @@
   - `batch-int` 같은 신규 project를 만들지
 - push 계정/robot 계정 또는 사용자 계정 확보
 - 노드가 해당 Harbor endpoint를 pull 가능한지 확인
+- Harbor는 `<project>/<repository>` 형식을 요구하므로 단일 repository 이름은 피한다
 
 ## 적용 순서
 
@@ -85,6 +94,14 @@ podman build -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github
 podman push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
 podman push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
 ```
+
+registry가 바뀌는 경우:
+
+```bash
+sed -n '1,120p' deploy/vm-lab/kustomization.yaml
+```
+
+여기서 `images:` 항목만 현재 registry 기준으로 바꾸면 된다.
 
 ## 1차 확인 항목
 

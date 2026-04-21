@@ -47,7 +47,7 @@ spec:
       serviceAccountName: jumi
       containers:
         - name: jumi
-          image: ghcr.io/heainseo/jumi:dev
+          image: jumi-image:dev
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

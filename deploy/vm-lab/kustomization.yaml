@@ -5,3 +5,10 @@ resources:
   - namespace.yaml
   - artifact-handoff.yaml
   - jumi.yaml
+images:
+  - name: artifact-handoff-image
+    newName: harbor.10.113.24.96.nip.io/batch-int/artifact-handoff
+    newTag: dev
+  - name: jumi-image
+    newName: harbor.10.113.24.96.nip.io/batch-int/jumi
+    newTag: dev

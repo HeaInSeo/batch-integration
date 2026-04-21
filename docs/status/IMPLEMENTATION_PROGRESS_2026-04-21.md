@@ -85,6 +85,7 @@
 - `lab-master-0` 기준 적용 README 추가
 - Harbor endpoint 기준 image 경로 초안 반영
 - 기존 Harbor 사용 예 `nodeforge/controlplane` 확인
+- registry 변경 가능성을 고려해 kustomize image override 구조로 전환
 
 현재 의미:
 - `100.123.80.48`의 `lab-master-0` 3노드 클러스터에 올릴 최소 자산이 생겼다.

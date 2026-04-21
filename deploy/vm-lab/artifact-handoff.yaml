@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: artifact-handoff
-          image: ghcr.io/heainseo/artifact-handoff:dev
+          image: artifact-handoff-image:dev
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
