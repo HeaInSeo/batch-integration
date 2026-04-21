@@ -87,6 +87,7 @@
 - 기존 Harbor 사용 예 `nodeforge/controlplane` 확인
 - registry 변경 가능성을 고려해 kustomize image override 구조로 전환
 - `JUMI`, `artifact-handoff` 최소 `Containerfile` 추가
+- `JUMI`, `artifact-handoff` 최소 `Dockerfile` 추가
 
 현재 의미:
 - `100.123.80.48`의 `lab-master-0` 3노드 클러스터에 올릴 최소 자산이 생겼다.

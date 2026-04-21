@@ -95,6 +95,21 @@ podman push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
 podman push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
 ```
 
+Docker 기준 예시:
+
+```bash
+docker login harbor.10.113.24.96.nip.io
+docker build -f /opt/go/src/github.com/HeaInSeo/artifact-handoff/Dockerfile -t harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev /opt/go/src/github.com/HeaInSeo/artifact-handoff
+docker build -f /opt/go/src/github.com/HeaInSeo/JUMI/Dockerfile -t harbor.10.113.24.96.nip.io/batch-int/jumi:dev /opt/go/src/github.com/HeaInSeo/JUMI
+docker push harbor.10.113.24.96.nip.io/batch-int/artifact-handoff:dev
+docker push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
+```
+
+메모:
+
+- 현재 `Containerfile`와 `Dockerfile`은 동일 기준의 최소 빌드 자산이다.
+- 추후 `nodekit`, `nodevault` 통합 경로는 별도 단계에서 정리한다.
+
 registry가 바뀌는 경우:
 
 ```bash
