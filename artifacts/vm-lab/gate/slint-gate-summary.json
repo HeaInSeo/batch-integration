@@ -1,0 +1,126 @@
+{
+  "schema_version": "slint.gate.v1",
+  "gate_result": "PASS",
+  "evaluation_status": "evaluated",
+  "measurement_status": "ok",
+  "baseline_status": "absent_first_run",
+  "policy_status": "ok",
+  "reasons": [],
+  "evaluated_at": "2026-04-22T10:27:28Z",
+  "input_refs": {
+    "measurement_summary": "/opt/go/src/github.com/HeaInSeo/batch-integration/artifacts/vm-lab/jumi-ah-smoke-sli-summary.json",
+    "policy_file": "/opt/go/src/github.com/HeaInSeo/batch-integration/policy/vm-lab/jumi-ah-smoke-thresholds.yaml",
+    "baseline_file": null
+  },
+  "checks": [
+    {
+      "name": "jumi_jobs_created_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_jobs_created_smoke",
+      "observed": 2.0,
+      "expected": ">= 2",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_artifacts_registered_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_artifacts_registered_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_input_resolve_requests_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_input_resolve_requests_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_input_remote_fetch_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_input_remote_fetch_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_input_materializations_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_input_materializations_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_sample_runs_finalized_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_sample_runs_finalized_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "jumi_gc_evaluate_requests_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "jumi_gc_evaluate_requests_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "ah_artifacts_registered_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "ah_artifacts_registered_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "ah_resolve_requests_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "ah_resolve_requests_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "ah_fallback_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "ah_fallback_smoke",
+      "observed": 1.0,
+      "expected": ">= 1",
+      "message": "within threshold"
+    },
+    {
+      "name": "ah_gc_backlog_bytes_smoke",
+      "category": "threshold",
+      "status": "pass",
+      "metric": "ah_gc_backlog_bytes_smoke",
+      "observed": 0.0,
+      "expected": "<= 0",
+      "message": "within threshold"
+    },
+    {
+      "name": "reliability-minimum",
+      "category": "reliability",
+      "status": "pass",
+      "metric": "reliability.collectionStatus",
+      "observed": "Complete",
+      "expected": ">= complete",
+      "message": "reliability requirement satisfied"
+    }
+  ],
+  "overall_message": "Policy checks passed."
+}
