@@ -13,6 +13,8 @@
 - `dev-space`는 아직 없다.
 - `multipass` user CLI는 불안정하다.
 - 따라서 원격 호스트에서 root 기준 CLI로 `lab-master-0`에 접근하는 운영이 필요할 수 있다.
+- 현재 Harbor project가 private이면 `batch-int-dev` namespace에
+  `harbor-regcred` pull secret이 있어야 한다.
 
 ## 구성
 
@@ -71,6 +73,24 @@
 - Harbor는 `<project>/<repository>` 형식을 요구하므로 단일 repository 이름은 피한다
 
 ## 적용 순서
+
+먼저 pull secret을 준비한다.
+
+원격 호스트의 기존 `podman login` 정보를 그대로 재사용하는 예시:
+
+```bash
+ssh seoy@100.123.80.48
+sudo scp -i /var/snap/multipass/common/data/multipassd/ssh-keys/id_rsa \
+  ~/.config/containers/auth.json ubuntu@10.113.24.254:/home/ubuntu/auth.json
+sudo ssh -i /var/snap/multipass/common/data/multipassd/ssh-keys/id_rsa ubuntu@10.113.24.254 '
+  sudo kubectl -n batch-int-dev create secret generic harbor-regcred \
+    --from-file=.dockerconfigjson=/home/ubuntu/auth.json \
+    --type=kubernetes.io/dockerconfigjson \
+    --dry-run=client -o yaml | sudo kubectl apply -f -
+'
+```
+
+그 다음 매니페스트를 적용한다.
 
 원격 호스트에서:
 
