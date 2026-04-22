@@ -89,6 +89,7 @@
 - `JUMI`, `artifact-handoff` 최소 `Containerfile` 추가
 - `JUMI`, `artifact-handoff` 최소 `Dockerfile` 추가
 - VM lab 이미지 빌드/적용 스크립트 초안 추가
+- VM lab 기본 이미지 경로를 `ko` 기준으로 정리
 
 현재 의미:
 - `100.123.80.48`의 `lab-master-0` 3노드 클러스터에 올릴 최소 자산이 생겼다.

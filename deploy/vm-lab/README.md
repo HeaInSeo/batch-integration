@@ -96,6 +96,25 @@ IMAGE_TAG=dev \
 ./scripts/apply-vm-lab-manifests.sh
 ```
 
+기본 권장 빌드 경로는 `ko`다.
+
+이유:
+
+- `JUMI`, `artifact-handoff` 모두 Go 바이너리 중심 서비스다.
+- registry/project 변경 시 `KO_DOCKER_REPO`만 바꾸면 된다.
+- 현재 `Dockerfile`/`Containerfile`은 fallback 경로로 유지한다.
+
+`ko` 기준 예시:
+
+```bash
+cd /opt/go/src/github.com/HeaInSeo/batch-integration
+REGISTRY_HOST=harbor.10.113.24.96.nip.io \
+REGISTRY_PROJECT=batch-int \
+IMAGE_TAG=dev \
+KO_BIN=ko \
+./scripts/build-vm-lab-images-ko.sh
+```
+
 이미지 push 예시:
 
 ```bash
@@ -129,6 +148,8 @@ docker push harbor.10.113.24.96.nip.io/batch-int/jumi:dev
 
 메모:
 
+- 기본 경로는 `ko`
+- `podman`/`docker` 경로는 fallback
 - 현재 `Containerfile`와 `Dockerfile`은 동일 기준의 최소 빌드 자산이다.
 - 추후 `nodekit`, `nodevault` 통합 경로는 별도 단계에서 정리한다.
 
