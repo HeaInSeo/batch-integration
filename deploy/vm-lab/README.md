@@ -62,6 +62,10 @@
   `kustomization.yaml`의 `images:` override를 통해 바꾸도록 구성했다.
 - 즉, 향후 Harbor 주소가 바뀌거나 GHCR 등 다른 registry로 전환돼도
   `deploy/vm-lab/kustomization.yaml`만 바꾸면 된다.
+- mutable tag 예: `:dev`를 재사용할 때
+  deployment가 `imagePullPolicy: IfNotPresent`면
+  클러스터가 예전 캐시 이미지를 계속 쓸 수 있다.
+- 따라서 VM lab 검증에서는 가능하면 unique tag를 쓰는 편이 안전하다.
 
 실제 배포 전 체크:
 
