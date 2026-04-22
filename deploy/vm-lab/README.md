@@ -202,6 +202,34 @@ kubectl -n batch-int-dev port-forward deploy/jumi 18081:8080 19090:9090
 - JUMI가 in-cluster config로 Job 생성 권한을 가지는지
 - JUMI가 AH HTTP 경로에 도달하는지
 
+## Live Smoke Eval
+
+VM lab에서 실제 smoke run과 `kube-slint` gate를 한 번에 돌릴 때는 아래 스크립트를 사용한다.
+
+```bash
+cd /opt/go/src/github.com/HeaInSeo/batch-integration
+bash scripts/run-vm-lab-live-smoke-eval.sh
+```
+
+이 스크립트는 다음을 수행한다.
+
+- run 전 `jumi`, `artifact-handoff` metrics 수집
+- 원격 smoke run 실행
+- run 후 metrics 수집
+- live fixture, summary, gate 파일 생성
+
+기본 산출물:
+
+- `deploy/vm-lab/fixtures/kube-slint-jumi-ah-smoke-metrics.live.json`
+- `artifacts/vm-lab/jumi-ah-smoke-live-sli-summary.json`
+- `artifacts/vm-lab/gate/slint-gate-live-summary.json`
+
+메모:
+
+- replay fixture 정책과 live 환경 정책은 분리했다.
+- live 환경에서는 AH retention backlog가 남을 수 있으므로
+  `policy/vm-lab/jumi-ah-live-thresholds.yaml`을 기본 사용한다.
+
 ## 아직 남은 것
 
 - 기존 Harbor project/권한 정책 확인

@@ -46,12 +46,14 @@
 - `batch-int-dev` namespace에 첫 배포 완료
 - ImagePullBackOff 원인 규명 및 복구 완료
 - 현재 `artifact-handoff`, `JUMI` 둘 다 Ready 상태 확보
+- JUMI -> AH live smoke 실행 성공
+- kube-slint live summary/gate 생성 경로 확보
+- live run 기준 gate `PASS` 확인
 
 ## 진행 중
 
-- JUMI submit fixture 또는 최소 run path로
-  AH resolve/register/finalize가 실제로 왕복되는지 검증하는 작업
-- kube-slint가 VM lab 관찰 결과를 어떻게 summary에 반영할지 연결하는 작업
+- live smoke 결과를 다음 스프린트 회귀 절차에 맞게 누적하는 작업
+- VM lab 누적 run에서 AH retention backlog를 어떻게 baseline/regression으로 해석할지 정리하는 작업
 
 ## 막힌 점
 
@@ -74,6 +76,7 @@
 2. 해당 결과를 kube-slint minimum guardrail과 연결
 3. VM lab에서 반복 가능한 smoke/회귀 절차 문서화
 4. `dev-space`는 이후 검증 단계에서 별도 착수
+5. live smoke summary를 baseline 후보로 관리할지 판단
 
 ## 일정 영향
 

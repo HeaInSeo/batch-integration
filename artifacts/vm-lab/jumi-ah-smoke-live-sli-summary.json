@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "slo.v3",
+  "generatedAt": "2026-04-22T19:38:13.133368372+09:00",
+  "config": {
+    "runId": "vm-lab-live-smoke-20260422T103739Z",
+    "startedAt": "2026-04-22T10:37:43Z",
+    "finishedAt": "2026-04-22T10:38:13Z",
+    "mode": {
+      "location": "outside",
+      "trigger": "none"
+    },
+    "tags": {
+      "collection": "live",
+      "env": "vm-lab",
+      "profile": "jumi-ah-live-smoke",
+      "source": "batch-integration"
+    },
+    "format": "v4",
+    "evidencePaths": {
+      "live_run_id": "vm-lab-live-smoke-20260422T103739Z",
+      "live_sample_run_id": "vm-lab-live-smoke-sample-20260422T103739Z",
+      "smoke_fixture": "deploy/vm-lab/fixtures/jumi-handoff-smoke.json",
+      "smoke_result_doc": "docs/status/VM_LAB_JUMI_AH_SMOKE_RESULT_2026-04-22.md"
+    }
+  },
+  "reliability": {
+    "collectionStatus": "Complete",
+    "evaluationStatus": "Complete",
+    "confidenceScore": 1,
+    "configSourceType": "injected",
+    "configSourcePath": "fixture_replay",
+    "scrapeLatencyMs": 0
+  },
+  "results": [
+    {
+      "id": "jumi_jobs_created_smoke",
+      "title": "JUMI Jobs Created Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should create at least two Jobs for producer and consumer nodes.",
+      "value": 2,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_jobs_created_total"
+      ]
+    },
+    {
+      "id": "jumi_artifacts_registered_smoke",
+      "title": "JUMI Artifacts Registered Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should register at least one producer output through AH.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_artifacts_registered_total"
+      ]
+    },
+    {
+      "id": "jumi_input_resolve_requests_smoke",
+      "title": "JUMI Input Resolve Requests Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should resolve at least one artifact binding before starting the consumer node.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_input_resolve_requests_total"
+      ]
+    },
+    {
+      "id": "jumi_input_remote_fetch_smoke",
+      "title": "JUMI Input Remote Fetch Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should observe at least one remote-fetch resolution decision.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_input_remote_fetch_total"
+      ]
+    },
+    {
+      "id": "jumi_input_materializations_smoke",
+      "title": "JUMI Input Materializations Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should mark at least one resolved input as requiring materialization.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_input_materializations_total"
+      ]
+    },
+    {
+      "id": "jumi_sample_runs_finalized_smoke",
+      "title": "JUMI Sample Runs Finalized Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should finalize at least one sample run through AH.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_sample_runs_finalized_total"
+      ]
+    },
+    {
+      "id": "jumi_gc_evaluate_requests_smoke",
+      "title": "JUMI GC Evaluate Requests Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should trigger at least one GC evaluation request.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "jumi_gc_evaluate_requests_total"
+      ]
+    },
+    {
+      "id": "ah_artifacts_registered_smoke",
+      "title": "AH Artifacts Registered Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should register at least one artifact inside AH inventory.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ah_artifacts_registered_total"
+      ]
+    },
+    {
+      "id": "ah_resolve_requests_smoke",
+      "title": "AH Resolve Requests Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should receive at least one resolve request from JUMI.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ah_resolve_requests_total"
+      ]
+    },
+    {
+      "id": "ah_fallback_smoke",
+      "title": "AH Fallback Smoke",
+      "unit": "count",
+      "kind": "delta_counter",
+      "description": "Smoke run should exercise at least one remote-fetch fallback path.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ah_fallback_total"
+      ]
+    },
+    {
+      "id": "ah_gc_backlog_bytes_smoke",
+      "title": "AH GC Backlog Bytes Smoke",
+      "unit": "bytes",
+      "kind": "gauge",
+      "description": "Smoke run should not leave non-zero AH GC backlog at the end of the window.",
+      "value": 1024,
+      "status": "fail",
+      "reason": "rule fail: value \u003e 0",
+      "inputsUsed": [
+        "ah_gc_backlog_bytes"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "runId": "vm-lab-live-smoke-20260422T103739Z",
+  "startedAt": "2026-04-22T10:37:43Z",
+  "finishedAt": "2026-04-22T10:38:13Z",
+  "method": "OutsideSnapshot",
+  "tags": {
+    "env": "vm-lab",
+    "profile": "jumi-ah-live-smoke",
+    "source": "batch-integration",
+    "collection": "live"
+  },
+  "evidencePaths": {
+    "smoke_fixture": "deploy/vm-lab/fixtures/jumi-handoff-smoke.json",
+    "smoke_result_doc": "docs/status/VM_LAB_JUMI_AH_SMOKE_RESULT_2026-04-22.md",
+    "live_run_id": "vm-lab-live-smoke-20260422T103739Z",
+    "live_sample_run_id": "vm-lab-live-smoke-sample-20260422T103739Z"
+  },
+  "startMetrics": {
+    "jumi_jobs_created_total": 10.0,
+    "jumi_artifacts_registered_total": 5.0,
+    "jumi_input_resolve_requests_total": 5.0,
+    "jumi_input_remote_fetch_total": 5.0,
+    "jumi_input_materializations_total": 5.0,
+    "jumi_sample_runs_finalized_total": 6.0,
+    "jumi_gc_evaluate_requests_total": 6.0,
+    "ah_artifacts_registered_total": 5.0,
+    "ah_resolve_requests_total": 5.0,
+    "ah_fallback_total": 5.0,
+    "ah_gc_backlog_bytes": 1024.0
+  },
+  "endMetrics": {
+    "jumi_jobs_created_total": 12.0,
+    "jumi_artifacts_registered_total": 6.0,
+    "jumi_input_resolve_requests_total": 6.0,
+    "jumi_input_remote_fetch_total": 6.0,
+    "jumi_input_materializations_total": 6.0,
+    "jumi_sample_runs_finalized_total": 7.0,
+    "jumi_gc_evaluate_requests_total": 7.0,
+    "ah_artifacts_registered_total": 6.0,
+    "ah_resolve_requests_total": 6.0,
+    "ah_fallback_total": 6.0,
+    "ah_gc_backlog_bytes": 1024.0
+  }
+}
