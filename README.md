@@ -49,3 +49,11 @@
   [`docs/master-plan/SPRINT_STRATEGY_v1.0.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/master-plan/SPRINT_STRATEGY_v1.0.md:1)
 - 검증 전략:
   [`docs/master-plan/VALIDATION_STRATEGY.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/master-plan/VALIDATION_STRATEGY.md:1)
+
+현재 빠른 VM lab 검증 진입점:
+- smoke summary 생성:
+  [`scripts/generate-kubeslint-vm-lab-summary.sh`](/opt/go/src/github.com/HeaInSeo/batch-integration/scripts/generate-kubeslint-vm-lab-summary.sh:1)
+- smoke gate 평가:
+  [`scripts/run-kubeslint-vm-lab-gate.sh`](/opt/go/src/github.com/HeaInSeo/batch-integration/scripts/run-kubeslint-vm-lab-gate.sh:1)
+- smoke summary + gate 일괄 실행:
+  [`scripts/run-vm-lab-smoke-eval.sh`](/opt/go/src/github.com/HeaInSeo/batch-integration/scripts/run-vm-lab-smoke-eval.sh:1)
