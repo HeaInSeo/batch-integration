@@ -60,7 +60,15 @@ wire contract와 문서가 서로 다른 형태를 설명하던 부분이었다.
 
 이 네 축의 불일치는 눈에 띄게 줄어든 상태다.
 
+## 오늘 추가 확인
+
+- 원격 `100.123.80.48`의 `multipass` 사용자 명령을 복구했다.
+- stale `core22` mount namespace와 user-data 경로 충돌을 분리해서 진단했다.
+- `/usr/local/bin/multipass`를
+  `root HOME + namespace discard + stale metadata cleanup + retry` 방식으로 교체했다.
+- `multipass list`, `version`, `info`, `exec` 실사용 검증을 통과했다.
+
 ## 아직 남은 것
 
-- `snap run multipass` 표준 user CLI 경로를 별도 debt item으로 닫기
+- raw `snap run multipass` 경로의 snapd platform debt는 별도 추적
 - 4월 말 상태 문서를 월말 기준으로 한 번 더 정리

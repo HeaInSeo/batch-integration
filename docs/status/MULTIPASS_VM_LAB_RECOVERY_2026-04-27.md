@@ -61,24 +61,25 @@
 - Harbor image push: 복구
 - VM lab redeploy/live smoke: 재개 가능
 
-## 아직 남은 기술부채
+## 표준 CLI 상태
 
-표준 CLI 경로는 아직 완전히 정상화되지 않았다.
+사용자가 직접 사용하는 `multipass` 명령은 복구됐다.
 
-- `snap run multipass list`
-- `sudo snap run multipass list`
+- `/usr/local/bin/multipass` wrapper를 재작성해
+  root-home 경로와 stale namespace 재시도를 묶었다.
+- `multipass list`, `version`, `info`, `exec`가
+  반복 호출에서도 성공하는 것을 확인했다.
 
-위 두 경로는 여전히 `core22` mount entry 오류를 낸다.
+다만 아래 raw snap 경로는 여전히 안정적이지 않다.
 
-반면 아래 경로는 usable 상태다.
-
-- `snap run multipass.multipassd` 기반 systemd service
-- 기존 wrapper 기반 `multipass` 호출
+- `snap run multipass`
+- `sudo snap run multipass`
 
 즉 현재 결론은 다음과 같다.
 
 - VM lab 운영 복구: 완료
-- 표준 user CLI 완전 복구: 미완료
+- 사용자 `multipass` CLI 복구: 완료
+- raw `snap run multipass` platform bug: 별도 debt
 
 ## 운영 판단
 
@@ -88,6 +89,6 @@ VM lab을 다시 사용 가능하게 만든 것이 더 중요하다.
 따라서 당장은:
 
 1. 복구된 VM lab으로 배포/회귀 검증 계속 진행
-2. `snap run multipass` 표준 경로는 별도 debt item으로 추적
+2. raw `snap run multipass` 결함은 플랫폼 debt item으로만 추적
 
 이 순서가 맞다.

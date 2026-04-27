@@ -61,12 +61,10 @@
 
 - live smoke 결과를 다음 스프린트 회귀 절차에 맞게 누적하는 작업
 - VM lab 누적 run에서 AH retention backlog를 어떻게 baseline/regression으로 해석할지 정리하는 작업
-- `snap run multipass` 표준 user CLI 복구
 
 ## 막힌 점
 
 - `kind + tilt` 주 경로는 현재 host kernel/cgroup 제약 때문에 막혀 있다
-- `multipass` user CLI의 표준 `snap run multipass` 경로는 여전히 `core22` mount entry 오류가 남아 있다
 - 로컬 workspace host에서 Harbor 직접 접근이 안 되어 `ko -> Harbor push`를 바로 쓰기 어렵다
 
 ## 현재 판단
@@ -77,6 +75,7 @@
 - 주 개발: `artifact-handoff`, `JUMI`, `kube-slint` seam 확장
 - 환경 검증: VM lab direct SSH 경로 활용
 - 이미지 빌드: 설계상 `ko`, 운영상 당분간 remote `podman/buildah` fallback 병행
+- `multipass` 사용자 CLI: wrapper로 복구 완료, raw `snap run`은 플랫폼 debt로 분리
 
 ## 다음 액션
 
