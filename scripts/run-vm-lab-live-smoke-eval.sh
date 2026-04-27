@@ -39,7 +39,7 @@ collect_metric_values() {
   local service="$1"
   local prefix="$2"
   local tmp_name="$3"
-  ssh_vm "sudo kubectl -n ${VM_NAMESPACE} run ${tmp_name} --image=busybox:1.36 --restart=Never --rm -i --command -- sh -c 'wget -qO- http://${service}:8080/metrics | grep ${prefix}_'"
+  ssh_vm "sudo kubectl -n ${VM_NAMESPACE} run ${tmp_name} --image=busybox:1.36 --restart=Never --rm -i --command -- sh -c 'wget -qO- http://${service}:8080/metrics | grep ${prefix}_ || true'"
 }
 
 main() {

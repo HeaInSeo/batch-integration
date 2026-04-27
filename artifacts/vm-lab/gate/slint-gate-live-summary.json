@@ -6,7 +6,7 @@
   "baseline_status": "absent_first_run",
   "policy_status": "ok",
   "reasons": [],
-  "evaluated_at": "2026-04-22T10:38:13Z",
+  "evaluated_at": "2026-04-27T12:27:30Z",
   "input_refs": {
     "measurement_summary": "/opt/go/src/github.com/HeaInSeo/batch-integration/artifacts/vm-lab/jumi-ah-smoke-live-sli-summary.json",
     "policy_file": "/opt/go/src/github.com/HeaInSeo/batch-integration/policy/vm-lab/jumi-ah-live-thresholds.yaml",

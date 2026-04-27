@@ -49,16 +49,24 @@
 - JUMI -> AH live smoke 실행 성공
 - kube-slint live summary/gate 생성 경로 확보
 - live run 기준 gate `PASS` 확인
+- `multipass` VM lab 장애 복구
+  - `lab-master-0`, `lab-worker-0`, `lab-worker-1` 재기동
+  - Harbor route/VM SSH 복구
+- phase-1 이미지 재배포 후 live smoke 재검증 성공
+  - image tag: `phase1-20260427-101256z`
+  - runId: `vm-lab-live-smoke-20260427T122705Z`
+  - gate: `PASS`
 
 ## 진행 중
 
 - live smoke 결과를 다음 스프린트 회귀 절차에 맞게 누적하는 작업
 - VM lab 누적 run에서 AH retention backlog를 어떻게 baseline/regression으로 해석할지 정리하는 작업
+- `snap run multipass` 표준 user CLI 복구
 
 ## 막힌 점
 
 - `kind + tilt` 주 경로는 현재 host kernel/cgroup 제약 때문에 막혀 있다
-- `multipass` user CLI와 `multipass exec`는 여전히 불안정하다
+- `multipass` user CLI의 표준 `snap run multipass` 경로는 여전히 `core22` mount entry 오류가 남아 있다
 - 로컬 workspace host에서 Harbor 직접 접근이 안 되어 `ko -> Harbor push`를 바로 쓰기 어렵다
 
 ## 현재 판단

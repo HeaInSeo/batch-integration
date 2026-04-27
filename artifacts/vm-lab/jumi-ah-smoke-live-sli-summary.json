@@ -1,10 +1,10 @@
 {
   "schemaVersion": "slo.v3",
-  "generatedAt": "2026-04-22T19:38:13.133368372+09:00",
+  "generatedAt": "2026-04-27T21:27:30.341711678+09:00",
   "config": {
-    "runId": "vm-lab-live-smoke-20260422T103739Z",
-    "startedAt": "2026-04-22T10:37:43Z",
-    "finishedAt": "2026-04-22T10:38:13Z",
+    "runId": "vm-lab-live-smoke-20260427T122705Z",
+    "startedAt": "2026-04-27T12:27:00Z",
+    "finishedAt": "2026-04-27T12:27:30Z",
     "mode": {
       "location": "outside",
       "trigger": "none"
@@ -17,8 +17,8 @@
     },
     "format": "v4",
     "evidencePaths": {
-      "live_run_id": "vm-lab-live-smoke-20260422T103739Z",
-      "live_sample_run_id": "vm-lab-live-smoke-sample-20260422T103739Z",
+      "live_run_id": "vm-lab-live-smoke-20260427T122705Z",
+      "live_sample_run_id": "vm-lab-live-smoke-sample-20260427T122705Z",
       "smoke_fixture": "deploy/vm-lab/fixtures/jumi-handoff-smoke.json",
       "smoke_result_doc": "docs/status/VM_LAB_JUMI_AH_SMOKE_RESULT_2026-04-22.md"
     }
