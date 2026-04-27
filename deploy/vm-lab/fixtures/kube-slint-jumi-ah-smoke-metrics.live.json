@@ -1,7 +1,7 @@
 {
-  "runId": "vm-lab-live-smoke-20260427T122705Z",
-  "startedAt": "2026-04-27T12:27:00Z",
-  "finishedAt": "2026-04-27T12:27:30Z",
+  "runId": "vm-lab-live-smoke-20260427T123617Z",
+  "startedAt": "2026-04-27T12:36:11Z",
+  "finishedAt": "2026-04-27T12:36:41Z",
   "method": "OutsideSnapshot",
   "tags": {
     "env": "vm-lab",
@@ -12,8 +12,8 @@
   "evidencePaths": {
     "smoke_fixture": "deploy/vm-lab/fixtures/jumi-handoff-smoke.json",
     "smoke_result_doc": "docs/status/VM_LAB_JUMI_AH_SMOKE_RESULT_2026-04-22.md",
-    "live_run_id": "vm-lab-live-smoke-20260427T122705Z",
-    "live_sample_run_id": "vm-lab-live-smoke-sample-20260427T122705Z"
+    "live_run_id": "vm-lab-live-smoke-20260427T123617Z",
+    "live_sample_run_id": "vm-lab-live-smoke-sample-20260427T123617Z"
   },
   "startMetrics": {
     "jumi_jobs_created_total": 0.0,

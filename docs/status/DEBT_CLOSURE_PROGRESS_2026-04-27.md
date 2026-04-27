@@ -27,6 +27,7 @@
 - proto에 `artifact_id`, `GetSampleRunLifecycle` contract 추가
 - README / phase status 문서 정합성 보강
 - HTTP 테스트에 envelope 등록과 lifecycle JSON key 확인 추가
+- startup 시점에 known metrics를 0으로 preseed 하도록 정리
 
 ### JUMI
 
@@ -43,6 +44,7 @@
 - artifact register / finalize / GC metric은 실제 handoff 호출 성공 시에만 증가하도록 정리
 - executable run spec 문서에 `sampleRunId`, `artifactBindings` 반영
 - executor 테스트에 `artifactId` 전달과 register metric 확인 추가
+- startup 시점에 known metrics를 0으로 preseed 하도록 정리
 
 ## 현재 판단
 
@@ -60,6 +62,5 @@ wire contract와 문서가 서로 다른 형태를 설명하던 부분이었다.
 
 ## 아직 남은 것
 
-- `artifact-handoff`, `JUMI` 각 저장소 워킹트리를 phase-1 기준 커밋 단위로 닫기
-- VM lab smoke를 현재 정리된 seam 기준으로 다시 한 번 확인할지 결정
+- `snap run multipass` 표준 user CLI 경로를 별도 debt item으로 닫기
 - 4월 말 상태 문서를 월말 기준으로 한 번 더 정리
