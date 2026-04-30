@@ -11,17 +11,17 @@
 ## 현재 타깃
 
 - 관리 호스트: `100.123.80.48`
-- 호스트 내 multipass 관리 영역: `multipass-k8s-lab`
-- 실제 검증 타깃: `multipass-k8s-lab` 내부에 새로 잡아야 하는 Kubernetes 검증 VM
+- 표준 랩 운영 저장소: `infra-lab`
+- 실제 검증 타깃: `infra-lab`이 관리하는 원격 Kubernetes 랩
 - 현재 확인 상태:
   - `100.123.80.48:22` 접속 가능
-  - 로컬 `multipass list`에는 직접 노출되지 않음
-  - 따라서 로컬 호스트의 multipass가 아니라 원격 호스트의 multipass 관리 영역을 확인해야 함
+  - `infra-lab/scripts/k8s-tool.sh status`로 원격 상태 확인 가능
+  - 표준 운영 경로는 host profile 기반 `infra-lab` 명령 사용
   - `dev-space`는 아직 존재하지 않는 것으로 전제함
 
 해석:
 - `100.123.80.48` 자체를 곧바로 검증 VM으로 취급하면 안 된다.
-- 먼저 `100.123.80.48`에 접속한 뒤, 그 안의 `multipass-k8s-lab`이 관리하는 VM 목록과
+- 먼저 `infra-lab` 기준 경로로 원격 랩 상태와
   실제 Kubernetes 타깃을 확인해야 한다.
 - `dev-space`는 후속 구축 항목이다.
 
@@ -33,8 +33,7 @@
 현재 확인된 Kubernetes 상태:
 - 3노드 모두 `Ready`
 - control-plane: `lab-master-0`
-- `lab-master-0` 내부 `kubectl` 정상 동작
-- kubeconfig: `/etc/kubernetes/admin.conf`
+- `infra-lab`의 `status` 경로로 노드/파드 상태 확인 가능
 - `dev-space`는 아직 설치/구축되지 않음
 
 ## 언제 이 경로로 넘길지
@@ -57,10 +56,9 @@
 VM 검증으로 넘기는 것이 맞다.
 
 그 시점에 필요한 첫 확인 항목:
-- `100.123.80.48`에서 `multipass list`
-- 대상 VM 이름 확인
-- kubeconfig 위치 확인
-- 현재 Kubernetes 경로 확인
+- `HOST_PROFILE=hosts/remote-lab.env ./scripts/k8s-tool.sh status`
+- 대상 노드와 워크로드 상태 확인
+- `infra-lab` 표준 경로로 kubeconfig/cluster 접근 확인
 
 그 다음 구축 항목:
 - dev-space 설치 또는 대체 워크플로우 선택
@@ -79,6 +77,6 @@ VM 검증으로 넘기는 것이 맞다.
 
 - 빠른 개발 루프를 VM 검증으로 대체하지 않는다.
 - VM 검증은 milestone 또는 기능 묶음 단위에서 수행한다.
-- `100.123.80.48`은 즉시 검증 환경이 아니라 구축 대상 환경이다.
-- 현재는 `multipass` user CLI가 불안정하므로, 복구 전까지는 root 기준 표준 CLI 경로로 상태를 확인한다.
+- `100.123.80.48`은 현재 실제 검증 환경으로 사용 가능하다.
+- 다만 VM lifecycle과 상태 확인은 `infra-lab` 표준 경로를 우선 사용한다.
 - 사용자가 직접 확인 가능한 단계가 되면, 접속 경로와 확인 명령을 별도 정리해 제공한다.
