@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dev-space observability</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f3ee;
+        --panel: #fffdf8;
+        --ink: #1f2933;
+        --muted: #52606d;
+        --line: #d9d0c3;
+        --pass: #1b7f3a;
+        --fail: #b42318;
+        --warn: #b54708;
+        --accent: #0f6cbd;
+      }
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Noto Sans KR", sans-serif;
+        background: radial-gradient(circle at top right, #fef3c7, var(--bg) 45%);
+        color: var(--ink);
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      h1, h2 {
+        margin: 0 0 12px;
+      }
+      p, li {
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      }
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .PASS { background: #dcfae6; color: var(--pass); }
+      .FAIL { background: #fee4e2; color: var(--fail); }
+      .WARN, .NO_GRADE { background: #fff1c2; color: var(--warn); }
+      .mono {
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+        font-size: 13px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th, td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .links a {
+        color: var(--accent);
+        text-decoration: none;
+        margin-right: 12px;
+      }
+      .muted { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="panel">
+        <h1>dev-space observability</h1>
+        <p>
+          This page exposes the latest JUMI/AH smoke evidence for the remote VM lab.
+          The primary signal is the <span class="mono">kube-slint</span> gate result, then the per-metric smoke checks.
+        </p>
+        <div class="links">
+          <a href="./latest-gate-summary.json">gate json</a>
+          <a href="./latest-sli-summary.json">summary json</a>
+          <a href="./metadata.json">metadata json</a>
+        </div>
+      </div>
+
+      <section class="grid" id="cards"></section>
+
+      <section class="panel">
+        <h2>Gate Checks</h2>
+        <table id="gate-table">
+          <thead>
+            <tr>
+              <th>name</th>
+              <th>status</th>
+              <th>observed</th>
+              <th>expected</th>
+              <th>message</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>SLI Results</h2>
+        <table id="sli-table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>status</th>
+              <th>value</th>
+              <th>kind</th>
+              <th>description</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      function badgeClass(value) {
+        return ["PASS", "FAIL", "WARN", "NO_GRADE"].includes(value) ? value : "";
+      }
+
+      function td(text) {
+        const node = document.createElement("td");
+        node.textContent = text ?? "";
+        return node;
+      }
+
+      async function boot() {
+        const [gateResp, sliResp, metaResp] = await Promise.all([
+          fetch("./latest-gate-summary.json"),
+          fetch("./latest-sli-summary.json"),
+          fetch("./metadata.json"),
+        ]);
+
+        const gate = await gateResp.json();
+        const sli = await sliResp.json();
+        const meta = await metaResp.json();
+
+        const cards = document.getElementById("cards");
+        const cardData = [
+          ["Gate", gate.gate_result],
+          ["Measured At", gate.evaluated_at],
+          ["Run ID", sli.config?.runId || meta.run_id],
+          ["Sample Run ID", sli.config?.evidencePaths?.live_sample_run_id || meta.sample_run_id],
+          ["Policy", meta.policy_file],
+          ["Published At", meta.published_at],
+        ];
+
+        for (const [label, value] of cardData) {
+          const panel = document.createElement("div");
+          panel.className = "panel";
+          const h2 = document.createElement("h2");
+          h2.textContent = label;
+          panel.appendChild(h2);
+
+          if (label === "Gate") {
+            const span = document.createElement("span");
+            span.className = `badge ${badgeClass(value)}`;
+            span.textContent = value;
+            panel.appendChild(span);
+          } else {
+            const p = document.createElement("p");
+            p.className = "mono";
+            p.textContent = value ?? "";
+            panel.appendChild(p);
+          }
+          cards.appendChild(panel);
+        }
+
+        const gateBody = document.querySelector("#gate-table tbody");
+        for (const check of gate.checks || []) {
+          const tr = document.createElement("tr");
+          tr.appendChild(td(check.name));
+          tr.appendChild(td(check.status));
+          tr.appendChild(td(check.observed));
+          tr.appendChild(td(check.expected));
+          tr.appendChild(td(check.message));
+          gateBody.appendChild(tr);
+        }
+
+        const sliBody = document.querySelector("#sli-table tbody");
+        for (const result of sli.results || []) {
+          const tr = document.createElement("tr");
+          tr.appendChild(td(result.id));
+          tr.appendChild(td(result.status));
+          tr.appendChild(td(result.value));
+          tr.appendChild(td(result.kind));
+          tr.appendChild(td(result.description));
+          sliBody.appendChild(tr);
+        }
+      }
+
+      boot().catch((err) => {
+        document.body.innerHTML = "<main><div class='panel'><h1>dev-space observability</h1><p class='mono'>failed to load observability payloads: " + err + "</p></div></main>";
+      });
+    </script>
+  </body>
+</html>

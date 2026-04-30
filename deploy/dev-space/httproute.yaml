@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: dev-space-observability
+  namespace: dev-space
+spec:
+  parentRefs:
+    - name: lab-gateway
+      namespace: harbor
+  hostnames:
+    - "dev-space.10.113.24.96.nip.io"
+  rules:
+    - backendRefs:
+        - name: dev-space-observability
+          port: 80
