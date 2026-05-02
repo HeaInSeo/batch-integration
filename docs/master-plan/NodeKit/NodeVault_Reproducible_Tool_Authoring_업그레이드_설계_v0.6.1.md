@@ -117,6 +117,8 @@ Sprint 일정과 검증 가능한 완료 기준을 추가했다.
 - 문서 번호 체계를 정리한다.
 - companion note: post-push validation/security data-plane 분리 방향은
   `NodeSentinel_Validation_Data_Plane_설계_v0.1.md`를 참조한다.
+- 공통 gRPC ingress 표준은
+  `K8S_SHARED_GRPC_INGRESS_GUIDELINE_v0.1.md`를 참조한다.
 
 ---
 
@@ -170,6 +172,8 @@ NodeSentinel
 
 구체적 data-plane 분리 설계는 companion 문서
 `NodeSentinel_Validation_Data_Plane_설계_v0.1.md`를 참조한다.
+외부 gRPC 노출의 공통 규약은
+`K8S_SHARED_GRPC_INGRESS_GUIDELINE_v0.1.md`를 따른다.
 
 검증 흐름은 다음과 같이 분리한다.
 

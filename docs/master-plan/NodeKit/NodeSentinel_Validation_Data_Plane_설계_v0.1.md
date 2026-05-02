@@ -7,6 +7,9 @@ Kubernetes data-plane app의 역할과 경계를 고정한다.
 v0.6.1이 논리적 L1~L5 흐름과 OCI metadata 방향을 정의했다면, 이 문서는 그중 **L3~L5-b를 실제로 누가 수행할지**를
 `NodeSentinel` 기준으로 명시한다.
 
+외부 gRPC 노출 방식의 공통 표준은
+`K8S_SHARED_GRPC_INGRESS_GUIDELINE_v0.1.md`를 따른다.
+
 ---
 
 ## 0. Executive Summary
@@ -136,6 +139,23 @@ NodeVault --gRPC EnqueueValidationWork--> NodeSentinel ingress
 
 이 ingress는 작업을 내부 `WorkStore`에 기록하고 즉시 반환한다.
 실제 검증은 비동기 worker가 수행한다.
+
+배치 표준:
+
+- `NodeSentinel`은 node별 직접 외부 노출을 기본으로 하지 않는다.
+- shared Cilium Gateway 뒤의 app-specific hostname을 사용한다.
+- 권장 hostname 규칙은 `<app>.apps.<base-domain>`이다.
+- 예: `nodesentinel.apps.example.internal`
+
+즉 외부 경계는 다음처럼 본다.
+
+```text
+NodeVault
+  → nodesentinel.apps.<base-domain>
+  → shared Gateway
+  → NodeSentinel GRPCRoute
+  → NodeSentinel Service
+```
 
 ### 5.2 내부 경계: NodeSentinel ingress → WorkStore → worker
 
