@@ -1,0 +1,22 @@
+[Unit]
+Description=Shift-Left Observability Tailnet Reverse Proxy
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+RuntimeDirectory=shift-left-observability-tailnet-proxy
+RuntimeDirectoryMode=0755
+ExecStartPre=__NGINX_BIN__ -t -g 'pid /run/shift-left-observability-tailnet-proxy/nginx.pid;' -c __INSTALL_DIR__/nginx.conf
+ExecStart=__NGINX_BIN__ -g 'pid /run/shift-left-observability-tailnet-proxy/nginx.pid; daemon off;' -c __INSTALL_DIR__/nginx.conf
+ExecReload=__NGINX_BIN__ -s reload -g 'pid /run/shift-left-observability-tailnet-proxy/nginx.pid;' -c __INSTALL_DIR__/nginx.conf
+Restart=on-failure
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=shift-left-observability-tailnet-proxy
+
+[Install]
+WantedBy=multi-user.target

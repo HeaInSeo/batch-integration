@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SF Observability</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f3ee;
+        --panel: #fffdf8;
+        --ink: #1f2933;
+        --muted: #52606d;
+        --line: #d9d0c3;
+        --pass: #1b7f3a;
+        --fail: #b42318;
+        --warn: #b54708;
+        --accent: #0f6cbd;
+      }
+      body {
+        margin: 0;
+        font-family: "IBM Plex Sans", "Noto Sans KR", sans-serif;
+        background: radial-gradient(circle at top right, #fef3c7, var(--bg) 45%);
+        color: var(--ink);
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      h1, h2 {
+        margin: 0 0 12px;
+      }
+      p, li {
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      }
+      .panel.lifecycle {
+        border-color: #c8d6c1;
+        background: linear-gradient(180deg, #fbfff5 0%, var(--panel) 100%);
+      }
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .PASS { background: #dcfae6; color: var(--pass); }
+      .FAIL { background: #fee4e2; color: var(--fail); }
+      .WARN, .NO_GRADE { background: #fff1c2; color: var(--warn); }
+      .mono {
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+        font-size: 13px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th, td {
+        text-align: left;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .links a {
+        color: var(--accent);
+        text-decoration: none;
+        margin-right: 12px;
+      }
+      .toolbar {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .setting {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .setting select {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        color: var(--ink);
+        padding: 6px 10px;
+        font: inherit;
+      }
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .pill {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: #fffefb;
+        font-size: 13px;
+      }
+      .pill strong {
+        font-size: 12px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .lifecycle-grid {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+      .lifecycle-value {
+        margin-top: 10px;
+        font-family: "IBM Plex Mono", "SFMono-Regular", monospace;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .lifecycle-copy {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      tr.lifecycle-row {
+        background: #fbfff5;
+      }
+      .muted { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="panel">
+        <h1>SF Observability</h1>
+        <p>
+          This page exposes the latest JUMI/AH smoke evidence for the remote VM lab.
+          The primary signal is the <span class="mono">kube-slint</span> gate result, then the per-metric smoke checks.
+        </p>
+        <div class="toolbar">
+          <div class="links">
+            <a href="./latest-gate-summary.json">gate json</a>
+            <a href="./latest-sli-summary.json">summary json</a>
+            <a href="./metadata.json">metadata json</a>
+          </div>
+          <label class="setting" for="description-language">
+            <span>SLI description</span>
+            <select id="description-language">
+              <option value="ko">한국어</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <section class="grid" id="cards"></section>
+
+      <section class="panel lifecycle">
+        <h2>Lifecycle Signals</h2>
+        <p class="muted">AH lifecycle and inventory-derived checks from the latest live smoke run.</p>
+        <div class="lifecycle-grid" id="lifecycle-cards"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Gate Checks</h2>
+        <table id="gate-table">
+          <thead>
+            <tr>
+              <th>name</th>
+              <th>status</th>
+              <th>observed</th>
+              <th>expected</th>
+              <th>message</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>SLI Results</h2>
+        <table id="sli-table">
+          <thead>
+            <tr>
+              <th>id</th>
+              <th>status</th>
+              <th>value</th>
+              <th>kind</th>
+              <th>description</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <script>
+      const DESCRIPTION_LANGUAGE_KEY = "shift-left-observability-sli-description-language";
+      const descriptionTranslations = {
+        jumi_jobs_created_smoke: {
+          ko: "스모크 실행은 producer와 consumer 노드용 Job을 최소 두 개 이상 만들어야 한다.",
+        },
+        jumi_artifacts_registered_smoke: {
+          ko: "스모크 실행은 AH를 통해 producer output을 최소 한 개 이상 등록해야 한다.",
+        },
+        jumi_input_resolve_requests_smoke: {
+          ko: "스모크 실행은 consumer 노드 시작 전에 artifact binding을 최소 한 번 이상 resolve해야 한다.",
+        },
+        jumi_input_remote_fetch_smoke: {
+          ko: "스모크 실행은 remote-fetch resolution 결정을 최소 한 번 이상 관측해야 한다.",
+        },
+        jumi_input_materializations_smoke: {
+          ko: "스모크 실행은 resolve된 입력 중 최소 한 개 이상을 materialization 필요 상태로 표시해야 한다.",
+        },
+        jumi_sample_runs_finalized_smoke: {
+          ko: "스모크 실행은 AH를 통해 sample run을 최소 한 번 이상 finalize해야 한다.",
+        },
+        jumi_gc_evaluate_requests_smoke: {
+          ko: "스모크 실행은 GC evaluation 요청을 최소 한 번 이상 발생시켜야 한다.",
+        },
+        ah_artifacts_registered_smoke: {
+          ko: "스모크 실행은 AH inventory 안에 artifact를 최소 한 개 이상 등록해야 한다.",
+        },
+        ah_resolve_requests_smoke: {
+          ko: "스모크 실행은 JUMI로부터 resolve 요청을 최소 한 번 이상 받아야 한다.",
+        },
+        ah_fallback_smoke: {
+          ko: "스모크 실행은 remote-fetch fallback 경로를 최소 한 번 이상 사용해야 한다.",
+        },
+        ah_gc_backlog_bytes_smoke: {
+          ko: "스모크 실행 종료 시점에는 AH GC backlog가 0이 아닌 값으로 남아 있으면 안 된다.",
+        },
+        ah_lifecycle_finalized_smoke: {
+          ko: "최신 스모크 실행의 AH sample run lifecycle은 finalize 상태여야 한다.",
+        },
+        ah_retention_window_active_smoke: {
+          ko: "최신 스모크 실행 직후에는 AH retention window가 활성 상태여야 하며 아직 GC 대상이 되면 안 된다.",
+        },
+        ah_retained_artifact_bytes_smoke: {
+          ko: "AH lifecycle의 retainedArtifactBytes는 현재 보존 중인 producer output 바이트 수를 반영해야 한다.",
+        },
+        ah_artifact_metadata_complete_smoke: {
+          ko: "AH inventory에 등록된 producer artifact는 digest, uri, sizeBytes 메타데이터를 모두 가져야 한다.",
+        },
+        ah_inventory_lifecycle_bytes_match_smoke: {
+          ko: "AH lifecycle의 retainedArtifactBytes는 inventory에 있는 retained artifact sizeBytes 합계와 일치해야 한다.",
+        },
+      };
+
+      const lifecycleResultOrder = [
+        "ah_lifecycle_finalized_smoke",
+        "ah_retention_window_active_smoke",
+        "ah_retained_artifact_bytes_smoke",
+        "ah_artifact_metadata_complete_smoke",
+        "ah_inventory_lifecycle_bytes_match_smoke",
+      ];
+
+      function badgeClass(value) {
+        return ["PASS", "FAIL", "WARN", "NO_GRADE"].includes(value) ? value : "";
+      }
+
+      function td(text) {
+        const node = document.createElement("td");
+        node.textContent = text ?? "";
+        return node;
+      }
+
+      function loadDescriptionLanguage() {
+        return localStorage.getItem(DESCRIPTION_LANGUAGE_KEY) || "ko";
+      }
+
+      function saveDescriptionLanguage(value) {
+        localStorage.setItem(DESCRIPTION_LANGUAGE_KEY, value);
+      }
+
+      function describeResult(result, language) {
+        const translated = descriptionTranslations[result.id]?.[language];
+        if (translated) {
+          return translated;
+        }
+        return result.description ?? "";
+      }
+
+      function formatResultValue(result) {
+        if (result.value == null) {
+          return "";
+        }
+        if (result.unit === "bytes") {
+          return `${result.value} bytes`;
+        }
+        if (result.unit === "bool") {
+          return result.value === 1 ? "true" : "false";
+        }
+        return String(result.value);
+      }
+
+      function isLifecycleResult(result) {
+        return lifecycleResultOrder.includes(result.id);
+      }
+
+      async function boot() {
+        const [gateResp, sliResp, metaResp] = await Promise.all([
+          fetch("./latest-gate-summary.json"),
+          fetch("./latest-sli-summary.json"),
+          fetch("./metadata.json"),
+        ]);
+
+        const gate = await gateResp.json();
+        const sli = await sliResp.json();
+        const meta = await metaResp.json();
+        const languageSelect = document.getElementById("description-language");
+        let currentLanguage = loadDescriptionLanguage();
+        languageSelect.value = currentLanguage;
+
+        const cards = document.getElementById("cards");
+        const cardData = [
+          ["Gate", gate.gate_result],
+          ["Measured At", gate.evaluated_at],
+          ["Run ID", sli.config?.runId || meta.run_id],
+          ["Sample Run ID", sli.config?.evidencePaths?.live_sample_run_id || meta.sample_run_id],
+          ["Policy", meta.policy_file],
+          ["Published At", meta.published_at],
+        ];
+
+        for (const [label, value] of cardData) {
+          const panel = document.createElement("div");
+          panel.className = "panel";
+          const h2 = document.createElement("h2");
+          h2.textContent = label;
+          panel.appendChild(h2);
+
+          if (label === "Gate") {
+            const span = document.createElement("span");
+            span.className = `badge ${badgeClass(value)}`;
+            span.textContent = value;
+            panel.appendChild(span);
+          } else {
+            const p = document.createElement("p");
+            p.className = "mono";
+            p.textContent = value ?? "";
+            panel.appendChild(p);
+          }
+          cards.appendChild(panel);
+        }
+
+        const gateBody = document.querySelector("#gate-table tbody");
+        for (const check of gate.checks || []) {
+          const tr = document.createElement("tr");
+          tr.appendChild(td(check.name));
+          tr.appendChild(td(check.status));
+          tr.appendChild(td(check.observed));
+          tr.appendChild(td(check.expected));
+          tr.appendChild(td(check.message));
+          gateBody.appendChild(tr);
+        }
+
+        const lifecycleCards = document.getElementById("lifecycle-cards");
+        const sliBody = document.querySelector("#sli-table tbody");
+        function renderSLIResults() {
+          sliBody.innerHTML = "";
+          lifecycleCards.innerHTML = "";
+          const lifecycleResults = new Map((sli.results || []).map((result) => [result.id, result]));
+          for (const id of lifecycleResultOrder) {
+            const result = lifecycleResults.get(id);
+            if (!result) {
+              continue;
+            }
+            const panel = document.createElement("div");
+            panel.className = "panel";
+
+            const title = document.createElement("h2");
+            title.textContent = result.title || result.id;
+            panel.appendChild(title);
+
+            const badge = document.createElement("span");
+            badge.className = `badge ${badgeClass(String(result.status).toUpperCase())}`;
+            badge.textContent = String(result.status).toUpperCase();
+            panel.appendChild(badge);
+
+            const value = document.createElement("div");
+            value.className = "lifecycle-value";
+            value.textContent = formatResultValue(result);
+            panel.appendChild(value);
+
+            const copy = document.createElement("p");
+            copy.className = "lifecycle-copy";
+            copy.textContent = describeResult(result, currentLanguage);
+            panel.appendChild(copy);
+
+            lifecycleCards.appendChild(panel);
+          }
+
+          for (const result of sli.results || []) {
+            const tr = document.createElement("tr");
+            if (isLifecycleResult(result)) {
+              tr.className = "lifecycle-row";
+            }
+            tr.appendChild(td(result.id));
+            tr.appendChild(td(result.status));
+            tr.appendChild(td(result.value));
+            tr.appendChild(td(result.kind));
+            tr.appendChild(td(describeResult(result, currentLanguage)));
+            sliBody.appendChild(tr);
+          }
+        }
+
+        languageSelect.addEventListener("change", (event) => {
+          currentLanguage = event.target.value;
+          saveDescriptionLanguage(currentLanguage);
+          renderSLIResults();
+        });
+
+        renderSLIResults();
+      }
+
+      boot().catch((err) => {
+        document.body.innerHTML = "<main><div class='panel'><h1>SF Observability</h1><p class='mono'>failed to load observability payloads: " + err + "</p></div></main>";
+      });
+    </script>
+  </body>
+</html>
