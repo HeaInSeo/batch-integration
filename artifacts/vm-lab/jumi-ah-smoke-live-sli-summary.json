@@ -1,26 +1,27 @@
 {
   "schemaVersion": "slo.v3",
-  "generatedAt": "2026-04-27T21:36:41.768509005+09:00",
+  "generatedAt": "2026-05-13T15:06:40.965997356+09:00",
   "config": {
-    "runId": "vm-lab-live-smoke-20260427T123617Z",
-    "startedAt": "2026-04-27T12:36:11Z",
-    "finishedAt": "2026-04-27T12:36:41Z",
+    "runId": "jumi-ah-dev-live-smoke-20260513T060605Z",
+    "startedAt": "2026-05-13T06:06:05Z",
+    "finishedAt": "2026-05-13T06:06:40Z",
     "mode": {
       "location": "outside",
       "trigger": "none"
     },
     "tags": {
       "collection": "live",
-      "env": "vm-lab",
-      "profile": "jumi-ah-live-smoke",
-      "source": "batch-integration"
+      "env": "infra-lab",
+      "namespace": "jumi-ah-dev",
+      "profile": "jumi-ah-dev-live-smoke",
+      "source": "JUMI"
     },
     "format": "v4",
     "evidencePaths": {
-      "live_run_id": "vm-lab-live-smoke-20260427T123617Z",
-      "live_sample_run_id": "vm-lab-live-smoke-sample-20260427T123617Z",
-      "smoke_fixture": "deploy/vm-lab/fixtures/jumi-handoff-smoke.json",
-      "smoke_result_doc": "docs/status/VM_LAB_JUMI_AH_SMOKE_RESULT_2026-04-22.md"
+      "live_run_id": "jumi-ah-dev-live-smoke-20260513T060605Z",
+      "live_sample_run_id": "jumi-ah-dev-live-smoke-sample-20260513T060605Z",
+      "smoke_fixture": "JUMI/deploy/devspace/fixtures/jumi-handoff-smoke.json",
+      "smoke_result_doc": "JUMI/scripts/run-jumi-ah-dev-live-smoke-eval.sh"
     }
   },
   "reliability": {
@@ -158,11 +159,76 @@
       "unit": "bytes",
       "kind": "gauge",
       "description": "Smoke run should not leave non-zero AH GC backlog at the end of the window.",
-      "value": 1024,
-      "status": "fail",
-      "reason": "rule fail: value \u003e 0",
+      "value": 0,
+      "status": "pass",
       "inputsUsed": [
         "ah_gc_backlog_bytes"
+      ]
+    },
+    {
+      "id": "ah_lifecycle_finalized_smoke",
+      "title": "AH Lifecycle Finalized Smoke",
+      "unit": "bool",
+      "kind": "derived_state",
+      "description": "Smoke run should finalize the AH sample-run lifecycle.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ahLifecycle.finalized"
+      ]
+    },
+    {
+      "id": "ah_retention_window_active_smoke",
+      "title": "AH Retention Window Active Smoke",
+      "unit": "bool",
+      "kind": "derived_state",
+      "description": "Immediately after finalize+GC evaluate, AH should retain the sample-run under the active retention window.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ahLifecycle.finalized",
+        "ahLifecycle.gcEligible",
+        "ahLifecycle.gcBlockedReason"
+      ]
+    },
+    {
+      "id": "ah_retained_artifact_bytes_smoke",
+      "title": "AH Retained Artifact Bytes Smoke",
+      "unit": "bytes",
+      "kind": "derived_gauge",
+      "description": "AH lifecycle retainedArtifactBytes should reflect the retained producer outputs for the sample run.",
+      "value": 0,
+      "status": "fail",
+      "inputsUsed": [
+        "ahLifecycle.retainedArtifactCount",
+        "ahLifecycle.retainedArtifactBytes"
+      ]
+    },
+    {
+      "id": "ah_artifact_metadata_complete_smoke",
+      "title": "AH Artifact Metadata Complete Smoke",
+      "unit": "count",
+      "kind": "derived_state",
+      "description": "AH inventory should retain digest, uri, and sizeBytes for all smoke-run producer artifacts.",
+      "value": 0,
+      "status": "fail",
+      "inputsUsed": [
+        "ahArtifacts.digest",
+        "ahArtifacts.uri",
+        "ahArtifacts.sizeBytes"
+      ]
+    },
+    {
+      "id": "ah_inventory_lifecycle_bytes_match_smoke",
+      "title": "AH Inventory Lifecycle Bytes Match Smoke",
+      "unit": "bool",
+      "kind": "derived_state",
+      "description": "AH lifecycle retainedArtifactBytes should match the sum of retained artifact sizeBytes in inventory.",
+      "value": 1,
+      "status": "pass",
+      "inputsUsed": [
+        "ahLifecycle.retainedArtifactBytes",
+        "ahArtifacts.sizeBytes"
       ]
     }
   ]

@@ -1,0 +1,68 @@
+{
+  "runId": "jumi-ah-dev-live-smoke-20260513T060605Z",
+  "startedAt": "2026-05-13T06:06:05Z",
+  "finishedAt": "2026-05-13T06:06:40Z",
+  "method": "OutsideSnapshot",
+  "tags": {
+    "env": "infra-lab",
+    "profile": "jumi-ah-dev-live-smoke",
+    "source": "JUMI",
+    "collection": "live",
+    "namespace": "jumi-ah-dev"
+  },
+  "evidencePaths": {
+    "smoke_fixture": "JUMI/deploy/devspace/fixtures/jumi-handoff-smoke.json",
+    "smoke_result_doc": "JUMI/scripts/run-jumi-ah-dev-live-smoke-eval.sh",
+    "live_run_id": "jumi-ah-dev-live-smoke-20260513T060605Z",
+    "live_sample_run_id": "jumi-ah-dev-live-smoke-sample-20260513T060605Z"
+  },
+  "startMetrics": {
+    "jumi_jobs_created_total": 4.0,
+    "jumi_artifacts_registered_total": 2.0,
+    "jumi_input_resolve_requests_total": 2.0,
+    "jumi_input_remote_fetch_total": 2.0,
+    "jumi_input_materializations_total": 2.0,
+    "jumi_sample_runs_finalized_total": 2.0,
+    "jumi_gc_evaluate_requests_total": 2.0,
+    "ah_artifacts_registered_total": 13.0,
+    "ah_resolve_requests_total": 13.0,
+    "ah_fallback_total": 13.0,
+    "ah_gc_backlog_bytes": 0.0
+  },
+  "endMetrics": {
+    "jumi_jobs_created_total": 6.0,
+    "jumi_artifacts_registered_total": 3.0,
+    "jumi_input_resolve_requests_total": 3.0,
+    "jumi_input_remote_fetch_total": 3.0,
+    "jumi_input_materializations_total": 3.0,
+    "jumi_sample_runs_finalized_total": 3.0,
+    "jumi_gc_evaluate_requests_total": 3.0,
+    "ah_artifacts_registered_total": 14.0,
+    "ah_resolve_requests_total": 14.0,
+    "ah_fallback_total": 14.0,
+    "ah_gc_backlog_bytes": 0.0
+  },
+  "ahLifecycle": {
+    "sampleRunId": "jumi-ah-dev-live-smoke-sample-20260513T060605Z",
+    "finalized": true,
+    "finalizedAt": "2026-05-13T06:06:26.322139253Z",
+    "retentionPolicySource": "service_default",
+    "retentionDuration": 900000000000,
+    "retentionUntil": "2026-05-13T06:21:26.322139253Z",
+    "gcEligible": false,
+    "gcBlockedReason": "retention_window_active",
+    "terminalNodeCount": 2,
+    "succeededNodeCount": 2,
+    "retainedArtifactCount": 1
+  },
+  "ahArtifacts": [
+    {
+      "sampleRunId": "jumi-ah-dev-live-smoke-sample-20260513T060605Z",
+      "producerNodeId": "produce",
+      "outputName": "report",
+      "artifactId": "jumi-ah-dev-live-smoke-sample-20260513T060605Z:produce:report",
+      "uri": "jumi://runs/jumi-ah-dev-live-smoke-20260513T060605Z/nodes/produce/outputs/report",
+      "createdAt": "2026-05-13T06:06:22.302148438Z"
+    }
+  ]
+}

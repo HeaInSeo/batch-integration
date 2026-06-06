@@ -16,6 +16,10 @@
 - `RegisterArtifact`, `ResolveHandoff`, `NotifyNodeTerminal` happy path 존재
 - in-memory store 존재
 
+현재 판단:
+- 코드 기준으로 대체로 충족됨
+- 단, transport 구현은 HTTP가 먼저 존재하고 제품형 gRPC 경계는 후속 milestone에서 닫아야 함
+
 ## M2. JUMI integration seam 삽입
 
 목표일: `2026-05-09`
@@ -25,6 +29,11 @@
 - `SampleRunID` 추가
 - executor에 최소 `BuildingBindings`/`ResolvingInputs` phase 반영
 - 기존 fixture가 유지되거나 의도적으로 마이그레이션됨
+
+현재 판단:
+- 코드 기준으로 대체로 충족됨
+- 단, 기본 런타임 경로는 아직 실제 `artifact-handoff` 대신 `NoopClient` fallback 흔적이 있어
+  M3 전에 제품형 통합 경로로 승격이 필요함
 
 ## M2.5. kube-slint 개발 동반 guardrail 연결
 
@@ -36,26 +45,39 @@
 - 최소 derived indicator 후보가 정리됨
 - save/commit 시점에 돌릴 최소 summary 출력 경로가 존재함
 
+현재 판단:
+- gate/summary 엔진은 기준선에 도달
+- 다음 초점은 standalone guardrail이 아니라 실제 `JUMI/AH` 통합 경로와 결합하는 것
+
 ## M3. 첫 실제 통합
 
 목표일: `2026-05-16`
 
 완료 기준:
-- JUMI가 AH에 실제 호출
+- JUMI가 AH에 실제 `gRPC over Cilium mesh` 호출
 - AH가 응답한 contract로 JUMI happy path 실행
-- 최소 e2e 시나리오 1개 존재
+- shared VM 내 dedicated namespace 기준 최소 e2e 시나리오 1개 존재
 - kube-slint가 JUMI/AH 최소 summary 생성
-- cluster 환경 의존도가 낮은 integration check 경로가 실제로 동작
+- `infra-lab` shared VM 기준 integration check 경로가 실제로 동작
 
-## M3.5. VM + dev-space 최소 구축
+현재 리스크:
+- code seam 자체는 있으나, 기본 런타임이 아직 `Noop/HTTP` 경로에 기대는 부분이 남아 있음
+- 따라서 이 milestone의 핵심 지연 후보는 관찰면 이름이나 접근성이 아니라 `gRPC/Cilium` 제품 경계 전환임
+
+## M3.5. Remote Dev Loop 최소 구축
 
 목표일: `2026-05-23`
 
 완료 기준:
-- `multipass` VM 내부에서 개발용 Kubernetes 경로 1개가 선택됨
-- JUMI/AH/kube-slint 배포 가능한 기본 경로가 존재함
-- 메트릭 확인 가능
-- kube-slint 1회 실행 가능
+- `infra-lab` shared VM 기반 개발용 Kubernetes 경로가 표준으로 확정됨
+- `DevSpace + bori + kube-slint` 원격 개발 루프가 최소 1개 앱 repo에서 동작함
+- `shift-left-observability` tailnet 진입점 `http://100.123.80.48:8008/` 이 표준 사용자 접근 경로로 동작함
+- `SF Observability`가 summary/gate 결과를 노출함
+- JUMI/AH/kube-slint 배포 가능한 dedicated namespace 기본 경로가 존재함
+
+현재 판단:
+- 원격 `DevSpace + bori + kube-slint` 검증과 `SF Observability` rename은 완료
+- 남은 핵심은 이 경로를 JUMI/AH 외 다른 데이터플레인 앱까지 확장 가능한 공용 운영 모델로 굳히는 일
 
 ## M4. 베타 기반
 
@@ -67,7 +89,7 @@
 - derived indicator 최소판 존재
 - multi-component summary 초안 존재
 - JUMI/AH 기능 PR과 kube-slint summary 변화가 같이 검증됨
-- `vm + dev-space`가 milestone 검증 경로로 편입됨
+- `infra-lab` shared VM + dedicated namespace 경로가 milestone 검증 경로로 편입됨
 
 ## M5. 운영성 강화
 
@@ -87,5 +109,6 @@
 완료 기준:
 - provenance-ready hook
 - manifest/digest 계약
-- multipass/devspace profile
+- DevSpace/bori profile
+- SF Observability 운영 모델
 - nightly regression 초안

@@ -6,10 +6,10 @@
   "baseline_status": "absent_first_run",
   "policy_status": "ok",
   "reasons": [],
-  "evaluated_at": "2026-04-27T12:36:41Z",
+  "evaluated_at": "2026-05-13T06:06:40Z",
   "input_refs": {
     "measurement_summary": "/opt/go/src/github.com/HeaInSeo/batch-integration/artifacts/vm-lab/jumi-ah-smoke-live-sli-summary.json",
-    "policy_file": "/opt/go/src/github.com/HeaInSeo/batch-integration/policy/vm-lab/jumi-ah-live-thresholds.yaml",
+    "policy_file": "/opt/go/src/github.com/HeaInSeo/batch-integration/../JUMI/policy/devspace/jumi-ah-live-thresholds.yaml",
     "baseline_file": null
   },
   "checks": [
@@ -18,7 +18,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_jobs_created_smoke",
-      "observed": 2.0,
+      "observed": 2,
       "expected": ">= 2",
       "message": "within threshold"
     },
@@ -27,7 +27,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_artifacts_registered_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -36,7 +36,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_input_resolve_requests_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -45,7 +45,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_input_remote_fetch_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -54,7 +54,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_input_materializations_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -63,7 +63,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_sample_runs_finalized_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -72,7 +72,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "jumi_gc_evaluate_requests_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -81,7 +81,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "ah_artifacts_registered_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -90,7 +90,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "ah_resolve_requests_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -99,7 +99,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "ah_fallback_smoke",
-      "observed": 1.0,
+      "observed": 1,
       "expected": ">= 1",
       "message": "within threshold"
     },
@@ -108,7 +108,7 @@
       "category": "threshold",
       "status": "pass",
       "metric": "ah_gc_backlog_bytes_smoke",
-      "observed": 1024.0,
+      "observed": 0,
       "expected": "<= 1024",
       "message": "within threshold"
     },

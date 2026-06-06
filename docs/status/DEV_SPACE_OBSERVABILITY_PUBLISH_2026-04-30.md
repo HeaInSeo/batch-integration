@@ -11,6 +11,12 @@
 현재 개발 진행 상태와 회귀 여부를 직접 읽을
 첫 번째 고정 URL을 제공하는 것이다.
 
+이름 주의:
+
+- 이 문서에서 `dev-space`는 우리가 만든 관찰면 namespace/site 이름이다.
+- `https://github.com/devspace-sh/devspace` 도구 자체를 뜻하지 않는다.
+- 현재 `dev-space`는 정적 observability page + K8s Service/HTTPRoute 배포 경로를 가리킨다.
+
 ## 배포 대상
 
 - 원격 호스트: `100.123.80.48`
@@ -45,7 +51,21 @@
 
 실제 접근 주소:
 
-- `http://dev-space.10.113.24.96.nip.io`
+- lab 내부 원본 주소:
+  `http://dev-space.10.113.24.96.nip.io`
+- tailnet 공식 사용자 주소:
+  `http://100.123.80.48:8008/`
+
+주의:
+
+- 위 주소는 `100.123.80.48` 호스트 또는 lab 라우팅이 있는 환경에서는 바로 접근된다.
+- tailnet 원격 클라이언트는 `10.113.24.96` VIP로 직접 가지 못할 수 있다.
+- 그런 경우는 `docs/status/DEV_SPACE_TAILNET_PROXY_2026-05-01.md` 의 reverse proxy 경로를 사용한다.
+
+현재 운영 기준:
+
+- 사용자가 직접 여는 표준 주소는 `http://100.123.80.48:8008/` 이다.
+- `http://dev-space.10.113.24.96.nip.io` 는 lab 내부 검증과 upstream 원본 주소로 유지한다.
 
 실제 확인 결과:
 

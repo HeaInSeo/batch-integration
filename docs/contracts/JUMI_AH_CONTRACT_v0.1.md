@@ -34,6 +34,7 @@
 - `output_name`
 - `artifact_id` optional
 - `digest` optional
+- `size_bytes` optional
 - `node_name` optional
 - `uri` optional
 
@@ -91,6 +92,9 @@
 - child submit timing의 owner
 - sample run 문맥의 owner
 - AH 응답을 실행 경로에 반영하는 owner
+- producer output 메타데이터 export의 owner
+  - `digest`, `size_bytes`, `uri`를 생산/수집해서 `RegisterArtifact`로 넘기는 쪽은 `JUMI` runtime 책임이다.
+  - 단, 이 메타데이터의 임시 export 매체는 제품 중심 계약이 아니라 runtime shim으로 취급한다.
 
 ## AH 책임
 
@@ -98,6 +102,21 @@
 - source locality 판정의 owner
 - source priority 최종 판단의 owner
 - acquisition contract 응답의 owner
+- artifact 상태 ledger의 owner
+  - `artifact-handoff`는 bytes 저장소가 아니라 inventory/ledger다.
+  - source-of-truth는 `AH inventory`이며, producer pod 내부의 임시 파일은 source-of-truth가 아니다.
+
+## Locator 와 Inventory 의미론
+
+- `manifest` 파일은 source-of-truth가 아니다.
+  - producer runtime이 종료 직후 output 메타데이터를 export하는 임시 shim이다.
+  - drift와 파편화를 막기 위해 사용자 workload가 제각각 쓰는 계약으로 두지 않는다.
+- `AH inventory`가 단일 source-of-truth다.
+  - `RegisterArtifact` 이후에는 `artifact_id`, `digest`, `size_bytes`, `node_name`, `uri`, lifecycle 상태를 `AH` 기준으로 본다.
+- `uri`는 영구 위치가 아니라 locator다.
+  - 특히 `jumi://...` 같은 값은 run-scope locator로 취급한다.
+  - local path/PVC path/pod path는 retention과 cleanup에 따라 한시적일 수 있다.
+- child는 파일 경로 하나를 신뢰하는 것이 아니라, `AH.ResolveHandoff`가 돌려주는 현재 유효한 acquisition 방법을 따른다.
 
 ## 구현 메모
 

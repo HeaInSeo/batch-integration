@@ -154,3 +154,19 @@ ad-hoc한 로그 열람보다 `kube-slint` 산출물을 우선 기준으로 본�
 이제 필요한 것은
 "기능이 있다"는 사실을 넘어서
 "사용자가 진행 상태와 회귀 여부를 읽을 수 있다"는 운영면을 닫는 것이다.
+
+## 후속 정리
+
+이 문서의 핵심 질문이던
+`dev-space` 사용자 관찰면과 표준 진입점은
+`2026-05-01` 기준으로 닫혔다.
+
+후속 스프린트 리얼라인은 아래 문서로 이어진다.
+
+- [`SPRINT_REALIGNMENT_2026-05-01.md`](/opt/go/src/github.com/HeaInSeo/batch-integration/docs/status/SPRINT_REALIGNMENT_2026-05-01.md:1)
+
+다음 스프린트의 핵심은
+`dev-space` 추가 구축이 아니라
+`infra-lab` shared VM 위에서
+`JUMI <-> artifact-handoff` 를
+`gRPC over Cilium mesh` 기준으로 실제 통합하는 것이다.

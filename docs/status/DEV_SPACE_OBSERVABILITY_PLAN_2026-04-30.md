@@ -95,7 +95,10 @@
 5. Harbor Gateway(`lab-gateway`)에 `HTTPRoute`를 붙인다.
 6. 사용자는 아래 host로 관찰면에 접근한다.
 
-- `dev-space.10.113.24.96.nip.io`
+- lab 내부 원본 주소:
+  `dev-space.10.113.24.96.nip.io`
+- tailnet 공식 사용자 주소:
+  `100.123.80.48:8008`
 
 ## 이 관찰면에서 보는 것
 
